@@ -1,0 +1,217 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   Int       @id @default(autoincrement())
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  email                String    @unique
+  passwordHash         String
+  username             String    @unique
+  phone                String?   @unique
+  profilePic           String?
+  firstName            String?
+  lastName             String?
+  role                 Role      @default(USER)
+  isDeleted            Boolean   @default(false)
+  rating               Float     @default(0.0)
+  totalRatings         Int       @default(0)
+  passwordResetExpires DateTime?
+  passwordResetToken   String?
+  refreshToken         String?
+  refreshTokenExp      DateTime?
+  storeName            String?
+  receivedMessages     Message[] @relation("ReceivedMessages")
+  sentMessages         Message[] @relation("SentMessages")
+  payments             Payment[]
+  products             Product[]
+  reviews              Review[]  @relation("ReviewerReviews")
+
+  @@index([createdAt])
+  @@index([role])
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
+}
+
+model Product {
+  id               Int                      @id @default(autoincrement())
+  title            String
+  description      String?
+  imageUrl         String[]
+  category         String
+  originalPrice    Float
+  discountedPrice  Float
+  stock            Int
+  isActive         Boolean                  @default(true)
+  isSold           Boolean                  @default(false)
+  condition        String
+  tags             String[]
+  views            Int                      @default(0)
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+  averageRating    Float                    @default(0.0)
+  totalReviews     Int                      @default(0)
+  lastRatingUpdate DateTime?
+  userId           Int?
+  searchText       String?
+  searchVector     Unsupported("tsvector")?
+  categoryId       Int?
+  cartItems        CartItem[]
+  delivery         Delivery?
+  orderItems       OrderItem[]
+  categoryRel      Category?                @relation(fields: [categoryId], references: [id])
+  user             User?                    @relation(fields: [userId], references: [id])
+  images           ProductImage[]
+  reviews          Review[]
+
+  @@index([userId])
+  @@index([averageRating])
+  @@index([isActive])
+  @@index([isSold])
+  @@index([stock])
+  @@index([discountedPrice])
+  @@index([isActive, isSold])
+  @@index([isActive, createdAt(sort: Desc)])
+  @@index([category, isActive, isSold])
+  @@index([category, createdAt(sort: Desc)])
+  @@index([category, discountedPrice])
+  @@index([category, views(sort: Desc)])
+  @@index([category, averageRating(sort: Desc)])
+  @@index([userId, isActive])
+}
+
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  url       String
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Payment {
+  id                Int      @id @default(autoincrement())
+  amount            Float
+  currency          String   @default("GHS")
+  status            String   @default("PENDING")
+  transactionId     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  paymentType       String   @default("PREMIUM")
+  userId            Int
+  metadata          Json?
+  providerPaymentId String?  @unique
+  orderId           Int?
+  order             Order?   @relation(fields: [orderId], references: [id])
+  user              User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+  @@index([orderId])
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  content    String
+  sentAt     DateTime @default(now())
+  senderId   Int
+  receiverId Int
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+}
+
+model Review {
+  id         Int      @id @default(autoincrement())
+  rating     Int
+  comment    String?
+  createdAt  DateTime @default(now())
+  reviewerId Int
+  productId  Int
+  product    Product  @relation(fields: [productId], references: [id])
+  reviewer   User     @relation("ReviewerReviews", fields: [reviewerId], references: [id])
+}
+
+model Delivery {
+  id        Int     @id @default(autoincrement())
+  method    String
+  location  String?
+  fee       Float?
+  productId Int     @unique
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Cart {
+  id        Int        @id @default(autoincrement())
+  userId    Int        @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  items     CartItem[]
+
+  @@index([userId])
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  cartId    Int
+  productId Int
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@unique([cartId, productId])
+  @@index([cartId])
+  @@index([productId])
+}
+
+model Order {
+  id             Int         @id @default(autoincrement())
+  buyerId        Int
+  whatsappNumber String
+  callNumber     String
+  buyerMessage   String?
+  status         String      @default("PENDING")
+  currency       String      @default("GHS")
+  totalAmount    Float
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  location       String?
+  paymentStatus  String      @default("UNPAID")
+  items          OrderItem[]
+  payments       Payment[]
+
+  @@index([buyerId])
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+}
+
+model OrderItem {
+  id          Int     @id @default(autoincrement())
+  orderId     Int
+  productId   Int
+  quantity    Int
+  unitPrice   Float
+  productName String
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
