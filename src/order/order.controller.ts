@@ -9,7 +9,7 @@ import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 @Controller('orders')
 @UseGuards(AuthGuard)
 export class OrderController {
-  constructor(private readonly orderService: OrderService) {}
+  constructor(private readonly orderService: OrderService) { }
 
   /**
    * Create an order for a single product.
@@ -70,5 +70,13 @@ export class OrderController {
   async payForOrder(@Req() req: any, @Param('id', ParseIntPipe) id: number) {
     const userId = req.user.id;
     return this.orderService.initiatePaymentForOrder(userId, id);
+  }
+
+  /** User cancels their own order */
+  @Delete(':id/cancel')
+  @HttpCode(HttpStatus.OK)
+  async cancelOrderUser(@Req() req: any, @Param('id', ParseIntPipe) id: number) {
+    const userId = req.user.id;
+    return this.orderService.cancelOrder(userId, id);
   }
 }

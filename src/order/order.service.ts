@@ -6,7 +6,7 @@ import { PaymentService } from '../payment/payment.service';
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly prisma: PrismaService, private readonly paymentService: PaymentService) {}
+  constructor(private readonly prisma: PrismaService, private readonly paymentService: PaymentService) { }
   async createOrder(buyerId: number, dto: CreateOrderDto) {
     const { productId, quantity, whatsappNumber, callNumber, location, message, items } = dto as any;
 
@@ -316,5 +316,43 @@ export class OrderService {
       data: { orderId: order.id } as any,
     });
     return { orderId: order.id, payment: result.data, authorization: result.authorization };
+  }
+
+  /**
+   * User cancels their own PENDING order.
+   * Restores stock and deletes the order.
+   */
+  async cancelOrder(userId: number, orderId: number) {
+    const order = await (this.prisma as any).order.findUnique({
+      where: { id: orderId },
+      include: { items: true },
+    });
+
+    if (!order) throw new NotFoundException('Order not found');
+    if (order.buyerId !== userId) throw new ForbiddenException('Not your order');
+    if (order.status !== 'PENDING') {
+      throw new BadRequestException('Can only cancel PENDING orders');
+    }
+
+    const tx: any[] = [];
+
+    // Restore stock for all items
+    for (const item of order.items) {
+      tx.push(
+        this.prisma.product.update({
+          where: { id: item.productId },
+          data: {
+            stock: { increment: item.quantity },
+            isSold: false, // Make sure it's available again
+          },
+        }) as any
+      );
+    }
+
+    // Delete the order
+    tx.push((this.prisma as any).order.delete({ where: { id: orderId } }));
+
+    await this.prisma.$transaction(tx as any);
+    return { success: true, message: 'Order cancelled successfully' };
   }
 }
