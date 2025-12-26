@@ -175,6 +175,17 @@ export class OrderService {
     return order;
   }
 
+  async getAllOrdersAdmin() {
+    return (this.prisma as any).order.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: {
+        items: {
+          include: { product: { select: { id: true, title: true, imageUrl: true, userId: true } } },
+        },
+      },
+    });
+  }
+
   async getBuyerOrders(userId: number) {
     return (this.prisma as any).order.findMany({
       where: { buyerId: userId },

@@ -22,6 +22,14 @@ export class OrderController {
     return this.orderService.createOrder(userId, dto);
   }
 
+  /** Admin: Get all orders in the system */
+  @Get('admin')
+  @Admin()
+  @UseGuards(AuthGuard, AdminGuard)
+  async getAllOrders() {
+    return this.orderService.getAllOrdersAdmin();
+  }
+
   /** Get orders where the authenticated user is the buyer */
   @Get()
   async myOrders(@Req() req: any) {
