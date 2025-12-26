@@ -25,6 +25,7 @@ async function bootstrap() {
     'http://localhost:3000',
     // Added deployed frontend domain for CORS
     'https://clicahair.vercel.app',
+    'https://nakpinto1.vercel.app',
     'https://www.cilcahair.com',
     'http://www.cilcahair.com',
     process.env.FRONTEND_URL,
