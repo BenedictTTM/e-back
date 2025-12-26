@@ -463,7 +463,7 @@ export class CategoryProductsService {
         },
         take: this.IMAGE_PREVIEW_LIMIT,
         orderBy: {
-          id: 'asc', // Consistent ordering
+          id: 'asc' as const, // Consistent ordering
         },
       },
 
