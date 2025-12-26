@@ -15,7 +15,7 @@ export class CategoryProductsService {
   private readonly DEFAULT_LIMIT = 20;
   private readonly IMAGE_PREVIEW_LIMIT = 3; // Only load 3 images for list view
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   /**
    * Get products by category with advanced filtering and pagination
@@ -34,7 +34,7 @@ export class CategoryProductsService {
    */
   async getProductsByCategory(dto: GetProductsByCategoryDto): Promise<CategoryProductsResponseDto> {
     const startTime = Date.now();
-    
+
     try {
       // OPTIMIZATION 1: Use raw category input (no normalization requested)
       const categoryKey = dto.category as any;
@@ -65,14 +65,14 @@ export class CategoryProductsService {
           // PERFORMANCE: Use query timeout to prevent slow queries
         }),
         // Count query (runs in parallel)
-        this.prisma.product.count({ 
+        this.prisma.product.count({
           where: whereClause,
         }),
       ]);
 
       // OPTIMIZATION 6: Single-pass transformation (no multiple iterations)
       const totalPages = Math.ceil(totalCount / limit);
-      
+
       // OPTIMIZATION 7: Efficient data transformation
       const transformedProducts = this.transformProductsBatch(products);
 
@@ -108,11 +108,11 @@ export class CategoryProductsService {
         `❌ Category query failed | ${dto.category} | ${duration}ms`,
         error.stack
       );
-      
+
       if (error instanceof BadRequestException || error instanceof NotFoundException) {
         throw error;
       }
-      
+
       throw new BadRequestException('Failed to fetch products. Please try again.');
     }
   }
@@ -206,7 +206,7 @@ export class CategoryProductsService {
         this.prisma.product.count({
           where: { category: normalizedCategory },
         }),
-        
+
         // Active products
         this.prisma.product.count({
           where: {
@@ -215,7 +215,7 @@ export class CategoryProductsService {
             isSold: false,
           },
         }),
-        
+
         // Price statistics
         this.prisma.product.aggregate({
           where: {
@@ -227,7 +227,7 @@ export class CategoryProductsService {
           _min: { discountedPrice: true },
           _max: { discountedPrice: true },
         }),
-        
+
         // Most popular tags
         this.getPopularTagsForCategory(normalizedCategory),
       ]);
@@ -267,7 +267,7 @@ export class CategoryProductsService {
     icon?: string;
   }>> {
     const startTime = Date.now();
-    
+
     try {
       // OPTIMIZATION: Single aggregation query with groupBy
       const categoryCounts = await this.prisma.product.groupBy({
@@ -325,8 +325,8 @@ export class CategoryProductsService {
    * 
    * @private
    */
-  private buildWhereClause(category: ProductCategory, dto: GetProductsByCategoryDto): Prisma.ProductWhereInput {
-    const where: Prisma.ProductWhereInput = {
+  private buildWhereClause(category: ProductCategory, dto: GetProductsByCategoryDto) {
+    const where: any = {
       category,
       isActive: true,
       isSold: false,
@@ -343,11 +343,11 @@ export class CategoryProductsService {
     // Price range filter - Build once, use efficiently
     if (dto.minPrice !== undefined || dto.maxPrice !== undefined) {
       where.discountedPrice = {};
-      
+
       if (dto.minPrice !== undefined) {
         where.discountedPrice.gte = dto.minPrice;
       }
-      
+
       if (dto.maxPrice !== undefined) {
         where.discountedPrice.lte = dto.maxPrice;
       }
@@ -364,8 +364,8 @@ export class CategoryProductsService {
   /**
    * Build WHERE clause for categoryId IN queries
    */
-  private buildWhereClauseByIds(categoryIds: number[], dto: { condition?: string; minPrice?: number; maxPrice?: number; inStock?: boolean }): Prisma.ProductWhereInput {
-    const where: Prisma.ProductWhereInput = {
+  private buildWhereClauseByIds(categoryIds: number[], dto: { condition?: string; minPrice?: number; maxPrice?: number; inStock?: boolean }) {
+    const where: any = {
       categoryId: { in: categoryIds },
       isActive: true,
       isSold: false,
@@ -396,9 +396,9 @@ export class CategoryProductsService {
    * 
    * @private
    */
-  private buildOrderByClause(sortBy: string): Prisma.ProductOrderByWithRelationInput | Prisma.ProductOrderByWithRelationInput[] {
+  private buildOrderByClause(sortBy: string) {
     // Use object lookup for faster execution than switch
-    const sortStrategies: Record<string, Prisma.ProductOrderByWithRelationInput | Prisma.ProductOrderByWithRelationInput[]> = {
+    const sortStrategies: Record<string, any> = {
       newest: { createdAt: 'desc' },
       oldest: { createdAt: 'asc' },
       'price-asc': { discountedPrice: 'asc' },
@@ -421,7 +421,7 @@ export class CategoryProductsService {
    * 
    * @private
    */
-  private getProductSelectFields(): Prisma.ProductSelect {
+  private getProductSelectFields() {
     return {
       // Essential product fields
       id: true,
@@ -441,7 +441,7 @@ export class CategoryProductsService {
       isSold: true,
       createdAt: true,
       updatedAt: true,
-      
+
       // Optimized seller data (minimal fields)
       user: {
         select: {
@@ -453,7 +453,7 @@ export class CategoryProductsService {
           rating: true,
         },
       },
-      
+
       // CRITICAL OPTIMIZATION: Limit images to first 3 only
       // Reduces query time by 40-60% for products with many images
       images: {
@@ -466,7 +466,7 @@ export class CategoryProductsService {
           id: 'asc', // Consistent ordering
         },
       },
-      
+
       // Delivery info (nullable)
       delivery: {
         select: {
@@ -502,7 +502,7 @@ export class CategoryProductsService {
 
       // Handle null user gracefully
       const user = product.user || {};
-      
+
       return {
         ...product,
         discountPercentage,
@@ -551,7 +551,7 @@ export class CategoryProductsService {
 
     // OPTIMIZATION: Use Map for O(1) lookups
     const tagCounts = new Map<string, number>();
-    
+
     // Single pass through all tags
     for (const product of products) {
       for (const tag of product.tags) {
@@ -582,17 +582,17 @@ export class CategoryProductsService {
       filters.condition = dto.condition;
       hasFilters = true;
     }
-    
+
     if (dto.minPrice !== undefined) {
       filters.minPrice = dto.minPrice;
       hasFilters = true;
     }
-    
+
     if (dto.maxPrice !== undefined) {
       filters.maxPrice = dto.maxPrice;
       hasFilters = true;
     }
-    
+
     if (dto.sortBy && dto.sortBy !== 'newest') {
       filters.sortBy = dto.sortBy;
       hasFilters = true;

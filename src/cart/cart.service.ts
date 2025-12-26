@@ -22,7 +22,7 @@ import { AddToCartDto, UpdateCartItemDto, MergeCartDto } from './dto';
 export class CartService {
   private readonly logger = new Logger(CartService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
 
   async addToCart(userId: number, addToCartDto: AddToCartDto) {
@@ -37,11 +37,11 @@ export class CartService {
       // Validate product exists (but don't enforce stock limits)
       const product = await this.prisma.product.findUnique({
         where: { id: productId },
-        select: { 
-          id: true, 
-          title: true, 
-          stock: true, 
-          originalPrice: true, 
+        select: {
+          id: true,
+          title: true,
+          stock: true,
+          originalPrice: true,
           discountedPrice: true,
         },
       });
@@ -451,8 +451,14 @@ export class CartService {
         }> = [];
 
         for (const item of items) {
-          const product = productMap.get(item.productId);
-          
+          const product = productMap.get(item.productId) as {
+            id: number;
+            title: string;
+            stock: number;
+            originalPrice: number;
+            discountedPrice: number;
+          };
+
           if (!product) {
             throw new NotFoundException(
               `Product with ID ${item.productId} not found`,
@@ -497,7 +503,7 @@ export class CartService {
             });
           } else {
             // Product doesn't exist: Add as new item (no stock validation)
-            
+
             // Create new cart item
             await tx.cartItem.create({
               data: {
@@ -534,7 +540,7 @@ export class CartService {
         const addedCount = mergeResults.filter((r) => r.action === 'added').length;
         const updatedCount = mergeResults.filter((r) => r.action === 'updated').length;
         const warningCount = mergeResults.filter((r) => r.stockWarning).length;
-        
+
         this.logger.log(
           `✅ Merge complete: ${addedCount} items added, ${updatedCount} items updated` +
           (warningCount > 0 ? `, ${warningCount} stock warnings` : '')
@@ -574,7 +580,7 @@ export class CartService {
       ) {
         throw error;
       }
-      
+
       this.logger.error(`💥 Cart merge failed for user ${userId}:`, error.message);
       throw new InternalServerErrorException(
         'Failed to merge cart',
