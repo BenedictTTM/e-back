@@ -24,11 +24,11 @@ export class EmailService {
       const frontendBase = this.configService.get<string>('FRONTEND_URL') ?? 'http://localhost:3000';
       const normalizedBase = frontendBase.endsWith('/') ? frontendBase.slice(0, -1) : frontendBase;
       const resetUrl = `${normalizedBase}/main/reset-password?token=${token}`;
-      
+
       const mailOptions = {
         from: this.configService.get<string>('FROM_EMAIL'),
         to: email,
-        subject: 'Password Reset Request - cilca',
+        subject: 'Password Reset Request - nakpinto',
         html: this.getPasswordResetTemplate(resetUrl),
       };
 
@@ -71,7 +71,7 @@ export class EmailService {
           </div>
           <div class="content">
             <p>Hello,</p>
-            <p>We received a request to reset your password for your cilca account.</p>
+            <p>We received a request to reset your password for your nakpinto account.</p>
             <p>Click the button below to reset your password:</p>
             <p style="text-align: center;">
               <a href="${resetUrl}" class="button">Reset Password</a>
@@ -82,7 +82,7 @@ export class EmailService {
             <p>If you didn't request a password reset, please ignore this email.</p>
           </div>
           <div class="footer">
-            <p>© 2025 cilca. All rights reserved.</p>
+            <p>© 2025 nakpinto. All rights reserved.</p>
           </div>
         </div>
       </body>

@@ -17,7 +17,7 @@ export class CrudService {
   constructor(
     private prisma: PrismaService,
     private cloudinaryService: CloudinaryService,
-  ) {}
+  ) { }
 
   async uploadImageToCloudinary(file: Express.Multer.File) {
     return await this.cloudinaryService.uploadImage(file).catch(() => {
@@ -25,24 +25,24 @@ export class CrudService {
     });
   }
 
-  async createProduct(productData: ProductDto,  files?: Express.Multer.File[]) {
+  async createProduct(productData: ProductDto, files?: Express.Multer.File[]) {
     const startTime = Date.now();
-    
+
     try {
       const { userId, ...productDataWithoutUser } = productData;
-      
+
       let imageUrls: string[] = [];
-      
+
       // OPTIMIZATION: Parallel image uploads (3x faster)
       if (files && files.length > 0) {
         this.logger.log(`⏫ Uploading ${files.length} images in parallel...`);
         const uploadStart = Date.now();
-        
+
         const uploadResults = await Promise.all(
           files.map(file => this.uploadImageToCloudinary(file))
         );
         imageUrls = uploadResults.map(result => result.secure_url);
-        
+
         const uploadDuration = Date.now() - uploadStart;
         this.logger.log(`✅ Images uploaded | ${files.length} files | ${uploadDuration}ms`);
       }
@@ -50,23 +50,23 @@ export class CrudService {
       // OPTIMIZATION: Fast transaction with minimal scope
       const newProduct = await this.prisma.$transaction(async (prisma) => {
         let categoryName = productDataWithoutUser.category;
-        
+
         // If categoryId is provided, validate it and get the name
         if (productDataWithoutUser.categoryId) {
           const category = await prisma.category.findUnique({
             where: { id: productDataWithoutUser.categoryId },
           });
-          
+
           if (!category) {
             throw new BadRequestException(`Category with ID ${productDataWithoutUser.categoryId} not found`);
           }
-          
+
           // Use category name if category string is not provided
           if (!categoryName) {
             categoryName = category.name;
           }
         } else if (!categoryName) {
-           throw new BadRequestException('Either category (string) or categoryId must be provided');
+          throw new BadRequestException('Either category (string) or categoryId must be provided');
         }
 
         // Create product (note: slot management removed from schema)
@@ -94,7 +94,7 @@ export class CrudService {
 
       const duration = Date.now() - startTime;
       this.logger.log(`✅ Product created | ID:${newProduct.id} | ${duration}ms`);
-      
+
       return { success: true, data: newProduct };
     } catch (error) {
       const duration = Date.now() - startTime;
@@ -108,7 +108,7 @@ export class CrudService {
    */
   async updateProduct(productId: number, productData: Partial<ProductDto>, userId: number) {
     const startTime = Date.now();
-    
+
     // OPTIMIZATION: Fetch only necessary fields for ownership check
     const product = await (this.prisma as any).product.findUnique({
       where: { id: productId },
@@ -122,7 +122,7 @@ export class CrudService {
     if (product.userId !== userId) {
       throw new ForbiddenException('You can only update your own products');
     }
-    
+
 
     try {
       const updated = await (this.prisma as any).product.update({
@@ -147,7 +147,7 @@ export class CrudService {
   async deleteProduct(productId: number, userId: number) {
     const startTime = Date.now();
 
-        const product = await (this.prisma as any).product.findUnique({
+    const product = await (this.prisma as any).product.findUnique({
       where: { id: productId },
       select: { id: true, userId: true },
     });
@@ -173,10 +173,25 @@ export class CrudService {
       where: { productId },
     });
 
-    if (cartItemsCount > 0 || orderItemsCount > 0 || reviewsCount > 0 || imagesCount > 0 || deliveryCount > 0) {
-      throw new BadRequestException('Cannot delete product with existing cart items, orders, reviews, images, or delivery info');
+    if (cartItemsCount > 0 || orderItemsCount > 0 || reviewsCount > 0 || deliveryCount > 0) {
+      // Fallback to Soft Delete (Archive)
+      this.logger.log(`⚠️ Dependencies found, performing soft delete for product ${productId}`);
+
+      const archived = await (this.prisma as any).product.update({
+        where: { id: productId },
+        data: {
+          isActive: false,
+          isSold: true // Mark as sold helps remove it from view too
+        },
+      });
+
+      return {
+        success: true,
+        data: archived,
+        message: 'Product archived (dependencies exist)'
+      };
     }
-    
+
 
     try {
       const deleted = await (this.prisma as any).product.delete({

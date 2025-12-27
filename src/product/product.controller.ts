@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query, ParseIntPipe , Request , UseGuards, ParseFloatPipe, DefaultValuePipe } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, ParseIntPipe, Request, UseGuards, ParseFloatPipe, DefaultValuePipe } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductDto } from './dto/product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -18,14 +18,14 @@ export class ProductController {
     private readonly productService: ProductService,
     private readonly searchProductsService: SearchProductsService,
     private readonly flashSalesService: FlashSalesService,
-  ) {}
+  ) { }
 
-@Post()
+  @Post()
   @Admin() // Only admins can create products
   @UseGuards(AuthGuard, AdminGuard)
   @UseInterceptors(FilesInterceptor('images')) // Add this to handle file upload
   async createProduct(
-    @Body() productData: ProductDto, 
+    @Body() productData: ProductDto,
     @Request() req,
     @UploadedFiles(
       new ParseFilePipe({
@@ -39,8 +39,8 @@ export class ProductController {
   ) {
     const userId = req.user?.id;
     console.log('User ID from token:', userId);
-console.log('Uploaded files:', files && files.length > 0 ? files.map(f => f.originalname) : 'No files uploaded');
-    
+    console.log('Uploaded files:', files && files.length > 0 ? files.map(f => f.originalname) : 'No files uploaded');
+
     return this.productService.createProduct(productData, files);
   }
 
@@ -67,7 +67,7 @@ console.log('Uploaded files:', files && files.length > 0 ? files.map(f => f.orig
     @Query('cacheable', new DefaultValuePipe('true')) cacheable?: string,
   ) {
     const filters: any = {};
-    
+
     if (category) filters.category = category;
     if (minPrice !== undefined) filters.minPrice = Number(minPrice);
     if (maxPrice !== undefined) filters.maxPrice = Number(maxPrice);
@@ -95,13 +95,13 @@ console.log('Uploaded files:', files && files.length > 0 ? files.map(f => f.orig
     if (!query || query.trim().length < 2) {
       return { suggestions: [] };
     }
-    
+
     // Use search service with caching
     const suggestions = await this.searchProductsService.getAutocompleteSuggestions(
       query,
       Math.min(limit, 10), // Max 10 suggestions
     );
-    
+
     return { suggestions };
   }
 
@@ -114,7 +114,7 @@ console.log('Uploaded files:', files && files.length > 0 ? files.map(f => f.orig
     const trending = await this.searchProductsService.getTrendingSearches(
       Math.min(limit, 20), // Max 20 trending items
     );
-    
+
     return { trending };
   }
 
@@ -127,7 +127,7 @@ console.log('Uploaded files:', files && files.length > 0 ? files.map(f => f.orig
     return await this.productService.getProductsByCategory(category, page, limit);
   }
 
-  @Get('user/me')
+  @Get('admin/me')
   @UseGuards(AuthGuard)
   async getMyProducts(
     @Request() req,
@@ -135,13 +135,14 @@ console.log('Uploaded files:', files && files.length > 0 ? files.map(f => f.orig
     @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number = 20,
   ) {
     const userId = req.user?.id || req.user?.sub;
-    
+
     if (!userId) {
       throw new Error('User ID not found in request');
     }
 
-    console.log(`📦 Fetching products for user ID: ${userId}`);
-    return await this.productService.getProductsByUserId(userId, page, limit);
+    console.log(`📦 Fetching all products for admin: ${userId}`);
+    // Passing true for includeInactive to fetch all products regardless of status
+    return await this.productService.getAllProducts(page, limit, true);
   }
 
   @Get('user/:userId')
@@ -168,8 +169,8 @@ console.log('Uploaded files:', files && files.length > 0 ? files.map(f => f.orig
   @Put(':id')
   @UseGuards(AuthGuard)
   async updateProduct(
-    @Param('id') id: string, 
-    @Body() productData: UpdateProductDto, 
+    @Param('id') id: string,
+    @Body() productData: UpdateProductDto,
     @Request() req
   ) {
     const userId = req.user?.id;

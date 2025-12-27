@@ -30,32 +30,35 @@ export class GetProductsService {
 
   constructor(
     private prisma: PrismaService,
-  ) {}
+  ) { }
 
   /**
    * Get all products with optimized pagination
    * 
    * PERFORMANCE: Parallel count + fetch, minimal fields
    */
-  async getAllProducts(page: number = 1, limit: number = 20) {
+  async getAllProducts(page: number = 1, limit: number = 20, includeInactive: boolean = false) {
     const startTime = Date.now();
-    
+
     // Validate and sanitize inputs
     const validatedPage = Math.max(1, page);
     const validatedLimit = Math.min(Math.max(1, limit), this.MAX_LIMIT);
     const skip = (validatedPage - 1) * validatedLimit;
 
+    // Filter condition based on includeInactive flag
+    const whereCondition = includeInactive ? {} : { isActive: true };
+
     // OPTIMIZATION: Parallel execution of count and data fetch
     const [products, totalCount] = await Promise.all([
       this.prisma.product.findMany({
-        where: { isActive: true },
+        where: whereCondition,
         select: this.getProductListSelect(),
         orderBy: { createdAt: 'desc' },
         skip,
         take: validatedLimit,
       }),
       this.prisma.product.count({
-        where: { isActive: true },
+        where: whereCondition,
       }),
     ]);
 
@@ -123,7 +126,7 @@ export class GetProductsService {
     try {
       // Use direct database search
       this.logger.log(`🔍 Searching database: "${searchTerm}"`);
-      
+
       const products = await this.prisma.product.findMany({
         where: {
           AND: [
@@ -212,7 +215,7 @@ export class GetProductsService {
         isActive: true,
         isSold: false,
       },
-        select: {
+      select: {
         id: true,
         title: true,
         description: true,
@@ -249,7 +252,7 @@ export class GetProductsService {
 
     const totalPages = Math.ceil(totalCount / validatedLimit);
 
-      return {
+    return {
       data: products.map(product => ({
         ...product,
         averageRating: this.calculateAverageRating((product as any).reviews ?? []),
@@ -313,7 +316,7 @@ export class GetProductsService {
 
     const totalPages = Math.ceil(totalCount / validatedLimit);
 
-      return {
+    return {
       data: products.map(product => ({
         ...product,
         averageRating: this.calculateAverageRating((product as any).reviews ?? []),
@@ -344,7 +347,7 @@ export class GetProductsService {
         id: true,
         title: true,
         imageUrl: true,
-         originalPrice: true,
+        originalPrice: true,
         discountedPrice: true,
         condition: true,
         createdAt: true,
@@ -412,19 +415,19 @@ export class GetProductsService {
     });
   }
 
- 
+
 
   // Helper methods
   private calculateAverageRating(reviews: any[]): number {
     if (!reviews || reviews.length === 0) return 0;
-    
+
     const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
     return Math.round((sum / reviews.length) * 10) / 10;
   }
 
   private getRatingDistribution(reviews: any[]): Record<number, number> {
     const distribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
-    
+
     reviews.forEach(review => {
       if (review.rating >= 1 && review.rating <= 5) {
         distribution[Math.floor(review.rating)]++;
@@ -512,7 +515,7 @@ export class GetProductsService {
       isActive: true,
       isSold: true,
       user: {
-          select: {
+        select: {
           id: true,
           username: true,
           firstName: true,

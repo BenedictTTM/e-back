@@ -1,41 +1,41 @@
 
 import { Injectable } from '@nestjs/common';
-import { CrudService } from "./Service/crud.products.service"; 
+import { CrudService } from "./Service/crud.products.service";
 import { GetProductsService } from "./Service/getproducts.service";
 import { ProductDto } from "./dto/product.dto"; // Adjust path as necessary
 import { UpdateProductDto } from "./dto/update-product.dto";
 
 @Injectable()
 export class ProductService {
-  constructor(
-    private readonly crudService: CrudService,
-    private readonly getProductsService: GetProductsService
-  ) {}
+    constructor(
+        private readonly crudService: CrudService,
+        private readonly getProductsService: GetProductsService
+    ) { }
 
-  async createProduct(productData: ProductDto , files?: Express.Multer.File[]) {
-    return this.crudService.createProduct(productData , files);
-  }
-
-    async updateProduct(productId: number, productData: UpdateProductDto , userId:number) {
-        return this.crudService.updateProduct(productId, productData , userId);
+    async createProduct(productData: ProductDto, files?: Express.Multer.File[]) {
+        return this.crudService.createProduct(productData, files);
     }
 
-    async deleteProduct(productId: number , userId: number) {
-        return this.crudService.deleteProduct(productId , userId);
+    async updateProduct(productId: number, productData: UpdateProductDto, userId: number) {
+        return this.crudService.updateProduct(productId, productData, userId);
     }
 
-    async getAllProducts(page?: number, limit?: number) {
-        return this.getProductsService.getAllProducts(page, limit);
+    async deleteProduct(productId: number, userId: number) {
+        return this.crudService.deleteProduct(productId, userId);
     }
 
-    async getProductById(productId : number ){
+    async getAllProducts(page?: number, limit?: number, includeInactive?: boolean) {
+        return this.getProductsService.getAllProducts(page, limit, includeInactive);
+    }
+
+    async getProductById(productId: number) {
         return this.getProductsService.getProductById(productId);
     }
 
     async getProductsByUserId(userId: number, page?: number, limit?: number) {
         return this.getProductsService.getProductsByUserId(userId, page, limit);
     }
-   
+
     async getProductsByCategory(category: string, page?: number, limit?: number) {
         return this.getProductsService.getProductsByCategory(category, page, limit);
     }

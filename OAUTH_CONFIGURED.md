@@ -6,7 +6,7 @@ Your Google OAuth credentials have been added to `.env`:
 
 ```
 Client ID: YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com
-Project: cilca-476919
+Project: nakpinto-476919
 Callback URL: http://localhost:3001/auth/oauth/google/callback
 ```
 
@@ -14,7 +14,7 @@ Callback URL: http://localhost:3001/auth/oauth/google/callback
 
 ### 1. ⚙️ Configure Google Cloud Console
 
-Go to: https://console.cloud.google.com/apis/credentials?project=cilca-476919
+Go to: https://console.cloud.google.com/apis/credentials?project=nakpinto-476919
 
 **Add Authorized Redirect URIs:**
 

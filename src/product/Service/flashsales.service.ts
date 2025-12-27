@@ -56,21 +56,21 @@ export interface FlashSaleResponse {
 @Injectable()
 export class FlashSalesService {
   private readonly logger = new Logger(FlashSalesService.name);
-  
+
   // Double Buffer System
   private currentBatch: FlashSaleProduct[] = [];
   private nextBatch: FlashSaleProduct[] = [];
-  
+
   // Metadata
   private currentRefreshTime: Date;
   private nextRefreshTime: Date;
   private generationCounter = 0;
-  
+
   // Pre-rendering Control
   private isPrerendering = false;
   private readonly PRE_RENDER_MINUTES = 5; // Start preparing 5min before expiry
   private readonly ROTATION_INTERVAL_MINUTES = 180; // Rotate every 3 hours
-  
+
   constructor(private prisma: PrismaService) {
     // Initialize both buffers on startup
     this.logger.log('🔧 PRODUCTION MODE: 3-hour rotation interval');
@@ -84,26 +84,26 @@ export class FlashSalesService {
   private async initializeService() {
     this.logger.log('🚀 Initializing Flash Sales Service...');
     this.logger.log(`📊 CONFIG: Rotation=${this.ROTATION_INTERVAL_MINUTES}min, Pre-render=${this.PRE_RENDER_MINUTES}min before`);
-    
+
     try {
       // Set initial timestamps
       this.currentRefreshTime = new Date();
       this.nextRefreshTime = this.getNextRotationTime();
-      
+
       this.logger.log(`⏰ Initial timestamps set:`);
       this.logger.log(`   Current refresh: ${this.currentRefreshTime.toISOString()}`);
       this.logger.log(`   Next refresh: ${this.nextRefreshTime.toISOString()}`);
-      
+
       // Load initial batch immediately
       this.logger.log('📦 Loading initial current batch...');
       await this.refreshCurrentBatch();
-      
+
       // Pre-render next batch in background (don't wait)
       this.logger.log('🎨 Starting background pre-render of next batch...');
-      this.preRenderNextBatch().catch(err => 
+      this.preRenderNextBatch().catch(err =>
         this.logger.error(`Failed to pre-render on init: ${err.message}`)
       );
-      
+
       this.logger.log(
         `✅ Flash Sales initialized | Current batch: ${this.currentBatch.length} products | ` +
         `Next batch: ${this.nextBatch.length} products | ` +
@@ -132,9 +132,9 @@ export class FlashSalesService {
     this.logger.log(`📊 Next batch size: ${this.nextBatch.length}`);
     this.logger.log(`📊 Generation counter: ${this.generationCounter}`);
     this.logger.log(`📊 Is pre-rendering: ${this.isPrerendering}`);
-    
+
     await this.performBufferSwap();
-    
+
     this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   }
 
@@ -151,9 +151,9 @@ export class FlashSalesService {
     this.logger.log(`📊 Current batch size: ${this.currentBatch.length}`);
     this.logger.log(`📊 Next batch size: ${this.nextBatch.length}`);
     this.logger.log(`📊 Is pre-rendering: ${this.isPrerendering}`);
-    
+
     await this.preRenderNextBatch();
-    
+
     this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   }
 
@@ -166,9 +166,9 @@ export class FlashSalesService {
     const now = new Date();
     const timeSinceRefresh = now.getTime() - this.currentRefreshTime?.getTime();
     const minutesSinceRefresh = Math.floor(timeSinceRefresh / (60 * 1000));
-    
+
     this.logger.log(`🔍 Safety check: ${minutesSinceRefresh} minutes since last refresh`);
-    
+
     // If more than 2.5 hours since last refresh (missed cron), force refresh
     if (timeSinceRefresh > 150 * 60 * 1000) {
       this.logger.warn('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
@@ -188,10 +188,10 @@ export class FlashSalesService {
    */
   private async performBufferSwap() {
     const startTime = Date.now();
-    
+
     this.logger.log('🔄 SWAP START');
     this.logger.log(`   Before swap - Current: ${this.currentBatch.length}, Next: ${this.nextBatch.length}`);
-    
+
     try {
       // Atomic swap - no database queries, instant
       if (this.nextBatch.length > 0) {
@@ -199,7 +199,7 @@ export class FlashSalesService {
         this.currentBatch = this.nextBatch;
         this.nextBatch = [];
         this.generationCounter++;
-        
+
         this.logger.log(
           `✅ SWAP COMPLETE | Generation ${this.generationCounter} | ` +
           `Old batch: ${oldBatchSize} → New batch: ${this.currentBatch.length} products | ` +
@@ -211,20 +211,20 @@ export class FlashSalesService {
         this.logger.warn('⚠️ Falling back to emergency refresh of current batch...');
         await this.refreshCurrentBatch();
       }
-      
+
       // Update timestamps
       const oldRefreshTime = this.currentRefreshTime;
       const oldNextTime = this.nextRefreshTime;
-      
+
       this.currentRefreshTime = new Date();
       this.nextRefreshTime = this.getNextRotationTime();
-      
+
       this.logger.log(`📅 Timestamp update:`);
       this.logger.log(`   Old current: ${oldRefreshTime?.toISOString()}`);
       this.logger.log(`   New current: ${this.currentRefreshTime.toISOString()}`);
       this.logger.log(`   Old next: ${oldNextTime?.toISOString()}`);
       this.logger.log(`   New next: ${this.nextRefreshTime.toISOString()}`);
-      
+
     } catch (error) {
       this.logger.error(`❌ SWAP FAILED: ${error.message}`);
       this.logger.error(`Stack: ${error.stack}`);
@@ -239,7 +239,7 @@ export class FlashSalesService {
   private async preRenderNextBatch() {
     this.logger.log('🎨 PRE-RENDER ATTEMPT');
     this.logger.log(`   isPrerendering flag: ${this.isPrerendering}`);
-    
+
     if (this.isPrerendering) {
       this.logger.warn('⚠️ SKIP: Pre-render already in progress');
       this.logger.warn('⚠️ This might indicate a previous pre-render is stuck!');
@@ -248,27 +248,27 @@ export class FlashSalesService {
 
     this.isPrerendering = true;
     this.logger.log('🔒 Pre-rendering flag set to TRUE');
-    
+
     const startTime = Date.now();
-    
+
     try {
       this.logger.log('🎨 Starting product fetch for next batch...');
-      
+
       const products = await this.fetchFlashSaleProducts();
-      
+
       this.logger.log(`📦 Fetched ${products.length} products`);
       this.logger.log(`   Current nextBatch size before assignment: ${this.nextBatch.length}`);
-      
+
       this.nextBatch = products;
-      
+
       this.logger.log(`   Next batch size after assignment: ${this.nextBatch.length}`);
-      
+
       const duration = Date.now() - startTime;
       this.logger.log(
         `✅ PRE-RENDER SUCCESS | ${this.nextBatch.length} products ready | ` +
         `${duration}ms | Swap scheduled: ${this.nextRefreshTime.toISOString()}`
       );
-      
+
     } catch (error) {
       this.logger.error(`❌ PRE-RENDER FAILED: ${error.message}`);
       this.logger.error(`Stack: ${error.stack}`);
@@ -285,26 +285,26 @@ export class FlashSalesService {
    */
   private async refreshCurrentBatch() {
     const startTime = Date.now();
-    
+
     this.logger.log('🔄 REFRESH CURRENT BATCH START');
     this.logger.log(`   Current batch size before: ${this.currentBatch.length}`);
-    
+
     try {
       this.logger.log('� Fetching products for current batch...');
-      
+
       const products = await this.fetchFlashSaleProducts();
-      
+
       this.logger.log(`📦 Fetched ${products.length} products`);
-      
+
       this.currentBatch = products;
       this.generationCounter++;
-      
+
       const duration = Date.now() - startTime;
       this.logger.log(
         `✅ CURRENT BATCH REFRESHED | Generation ${this.generationCounter} | ` +
         `${this.currentBatch.length} products | ${duration}ms`
       );
-      
+
     } catch (error) {
       this.logger.error(`❌ REFRESH CURRENT BATCH FAILED: ${error.message}`);
       this.logger.error(`Stack: ${error.stack}`);
@@ -324,26 +324,42 @@ export class FlashSalesService {
    * Core method: Fetch and prepare flash sale products
    * Extracted for reusability (current batch + next batch)
    * 
-   * PERFORMANCE OPTIMIZATIONS:
-   * - Minimal field selection
-   * - Indexed query (isActive, isSold, stock)
-   * - Efficient filtering and transformation
-   * - In-memory shuffle (fast)
+   * LOGIC:
+   * - Selects completely random active products
+   * - No discount threshold validation
+   * - Uses database-native randomization
    */
   private async fetchFlashSaleProducts(): Promise<FlashSaleProduct[]> {
     const startTime = Date.now();
-    
-    try {
-      this.logger.log('🔍 Fetching products for flash sales...');
 
-      // OPTIMIZATION: Minimal field selection, indexed queries
+    try {
+      this.logger.log('🔍 Fetching RANDOM products for flash sales...');
+
+      // 1. Get random IDs using native DB randomization
+      // This is efficient for getting a random sample from a large table
+      const randomIdsRlt = await this.prisma.$queryRaw<{ id: number }[]>`
+        SELECT id FROM "Product" 
+        WHERE "isActive" = true 
+          AND "isSold" = false 
+          AND "stock" > 0 
+          AND "originalPrice" > 0 
+        ORDER BY RANDOM() 
+        LIMIT 12
+      `;
+
+      const randomIds = randomIdsRlt.map(r => r.id);
+
+      if (randomIds.length === 0) {
+        this.logger.warn('⚠️ No active products found for flash sales');
+        return [];
+      }
+
+      this.logger.log(`🎲 Selected ${randomIds.length} random IDs: ${randomIds.join(', ')}`);
+
+      // 2. Fetch full details for these IDs
       const products = await this.prisma.product.findMany({
         where: {
-          isActive: true,
-          isSold: false,
-          stock: { gt: 0 },
-          originalPrice: { gt: 0 },
-          discountedPrice: { gt: 0 },
+          id: { in: randomIds }
         },
         select: {
           id: true,
@@ -365,105 +381,27 @@ export class FlashSalesService {
             },
           },
         },
-        // OPTIMIZATION: Limit initial fetch to reduce memory
-        take: 1000, // Process max 1000 products
-        orderBy: {
-          createdAt: 'desc', // Recent products more likely to be active
-        },
       });
 
-      // OPTIMIZATION: Single-pass filter + transform with tiered discount ranges
-      const excellentProducts: FlashSaleProduct[] = []; // 40%+ discount
-      const greatProducts: FlashSaleProduct[] = []; // 20-39% discount
-      const goodProducts: FlashSaleProduct[] = []; // 10-19% discount
-      const anyDiscountProducts: FlashSaleProduct[] = []; // Any discount
-      
-      this.logger.log(`🔍 Database returned ${products.length} raw candidates`);
-      let skippedNoUser = 0;
-      let skippedLowDiscount = 0;
-
-      for (const product of products) {
-        // Skip products without a user
-        // if (!product.user) {
-        //   skippedNoUser++;
-        //   continue;
-        // }
-        
+      // 3. Map to FlashSaleProduct interface
+      const activeProducts: FlashSaleProduct[] = products.map(product => {
         const discountPercentage = this.calculateDiscount(
           product.originalPrice,
           product.discountedPrice,
         );
-        
-        // Skip products with no meaningful discount
-        if (discountPercentage < 5) {
-          skippedLowDiscount++;
-          continue;
-        }
-        
-        const productWithDiscount = {
+
+        return {
           ...product,
           discountPercentage,
         };
-        
-        // Categorize by discount tier
-        if (discountPercentage >= 40) {
-          excellentProducts.push(productWithDiscount);
-        } else if (discountPercentage >= 20) {
-          greatProducts.push(productWithDiscount);
-        } else if (discountPercentage >= 10) {
-          goodProducts.push(productWithDiscount);
-        } else {
-          anyDiscountProducts.push(productWithDiscount);
-        }
-      }
-
-      if (skippedNoUser > 0 || skippedLowDiscount > 0) {
-        this.logger.warn(`⚠️ Skipped products: No User=${skippedNoUser}, Low Discount(<5%)=${skippedLowDiscount}`);
-      }
-
-      this.logger.log(
-        `✅ Found products by tier: Excellent (40%+): ${excellentProducts.length}, ` +
-        `Great (20-39%): ${greatProducts.length}, Good (10-19%): ${goodProducts.length}, ` +
-        `Other: ${anyDiscountProducts.length}`,
-      );
-
-      // Build final selection: Prioritize excellent, then great, then good, then any
-      // Try to get at least 10 products for variety
-      let selectedProducts: FlashSaleProduct[] = [];
-      
-      // First, add excellent products (up to 10)
-      selectedProducts = this.shuffleArray(excellentProducts).slice(0, 10);
-      
-      // If we need more, add great products
-      if (selectedProducts.length < 10) {
-        const needed = 10 - selectedProducts.length;
-        const additionalGreat = this.shuffleArray(greatProducts).slice(0, needed);
-        selectedProducts = [...selectedProducts, ...additionalGreat];
-      }
-      
-      // If still need more, add good products
-      if (selectedProducts.length < 10) {
-        const needed = 10 - selectedProducts.length;
-        const additionalGood = this.shuffleArray(goodProducts).slice(0, needed);
-        selectedProducts = [...selectedProducts, ...additionalGood];
-      }
-      
-      // If still need more, add any discount products
-      if (selectedProducts.length < 10) {
-        const needed = 10 - selectedProducts.length;
-        const additionalAny = this.shuffleArray(anyDiscountProducts).slice(0, needed);
-        selectedProducts = [...selectedProducts, ...additionalAny];
-      }
-      
-      // Shuffle final selection for variety
-      selectedProducts = this.shuffleArray(selectedProducts);
+      });
 
       const duration = Date.now() - startTime;
       this.logger.log(
-        `🎉 Flash sales products prepared | ${selectedProducts.length} products | ${duration}ms`,
+        `🎉 Flash sales products prepared | ${activeProducts.length} products | ${duration}ms`,
       );
 
-      return selectedProducts;
+      return activeProducts;
     } catch (error) {
       this.logger.error(`❌ Error fetching flash sale products: ${error.message}`);
       throw error;
@@ -479,7 +417,7 @@ export class FlashSalesService {
     this.logger.log(`   Current batch: ${this.currentBatch.length} products`);
     this.logger.log(`   Next batch: ${this.nextBatch.length} products`);
     this.logger.log(`   Generation: ${this.generationCounter}`);
-    
+
     // If current batch is empty (shouldn't happen), try emergency refresh
     if (this.currentBatch.length === 0) {
       this.logger.warn('⚠️ EMERGENCY: Current batch empty!');
@@ -496,7 +434,7 @@ export class FlashSalesService {
       refreshesIn: Math.max(0, refreshesIn),
       generation: this.generationCounter,
     };
-    
+
     this.logger.log(`✅ Returning ${response.products.length} products | Refreshes in ${Math.floor(refreshesIn / 1000)}s`);
 
     return response;
@@ -520,21 +458,21 @@ export class FlashSalesService {
   private getNextRotationTime(): Date {
     const now = new Date();
     const next = new Date(now);
-    
+
     // Round up to next 3-hour mark (0, 3, 6, 9, 12, 15, 18, 21)
     const currentHour = next.getHours();
     const nextInterval = Math.ceil((currentHour + 1) / 3) * 3;
-    
+
     next.setHours(nextInterval % 24, 0, 0, 0);
-    
+
     // If we've wrapped to next day, ensure we're at the right time
     if (nextInterval >= 24) {
       next.setDate(next.getDate() + 1);
       next.setHours(0, 0, 0, 0);
     }
-    
+
     this.logger.log(`⏰ Calculated next rotation: ${next.toISOString()} (from ${now.toISOString()})`);
-    
+
     return next;
   }
 
@@ -546,14 +484,14 @@ export class FlashSalesService {
     this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     this.logger.log('🔄 MANUAL REFRESH TRIGGERED');
     this.logger.log(`   Before: Current=${this.currentBatch.length}, Next=${this.nextBatch.length}`);
-    
+
     // Refresh both buffers
     await this.refreshCurrentBatch();
     await this.preRenderNextBatch();
-    
+
     this.logger.log(`   After: Current=${this.currentBatch.length}, Next=${this.nextBatch.length}`);
     this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    
+
     return this.getFlashSales();
   }
 }
