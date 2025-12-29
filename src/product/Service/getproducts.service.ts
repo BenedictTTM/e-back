@@ -23,7 +23,7 @@ export class GetProductsService {
   private readonly logger = new Logger(GetProductsService.name);
 
   // Performance constants
-  private readonly MAX_LIMIT = 100;
+  private readonly MAX_LIMIT = 1000;
   private readonly DEFAULT_LIMIT = 20;
   private readonly MAX_REVIEWS_PREVIEW = 5;
   private readonly MAX_IMAGES_PREVIEW = 1;

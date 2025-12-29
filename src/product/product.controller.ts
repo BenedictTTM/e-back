@@ -87,36 +87,7 @@ export class ProductController {
   }
 
 
-  @Get('search/autocomplete')
-  async getAutocompleteSuggestions(
-    @Query('q') query: string,
-    @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number = 5,
-  ) {
-    if (!query || query.trim().length < 2) {
-      return { suggestions: [] };
-    }
 
-    // Use search service with caching
-    const suggestions = await this.searchProductsService.getAutocompleteSuggestions(
-      query,
-      Math.min(limit, 10), // Max 10 suggestions
-    );
-
-    return { suggestions };
-  }
-
-
-  @Get('search/trending')
-  async getTrendingSearches(
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
-  ) {
-    // Use search service with caching
-    const trending = await this.searchProductsService.getTrendingSearches(
-      Math.min(limit, 20), // Max 20 trending items
-    );
-
-    return { trending };
-  }
 
   @Get('category/:category')
   async getProductsByCategory(
@@ -188,5 +159,12 @@ export class ProductController {
   @Post('flash-sales/refresh')
   async refreshFlashSales() {
     return await this.flashSalesService.forceRefresh();
+  }
+
+  @Post('import')
+  @UseGuards(AuthGuard, AdminGuard)
+  async importProducts(@Request() req) {
+    const userId = req.user?.id;
+    return await this.productService.importProductsFromJSON(userId);
   }
 }

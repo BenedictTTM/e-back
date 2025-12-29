@@ -1,0 +1,1473 @@
+{
+    "adverts_list": {
+        "mode_default": "gallery",
+        "count": 450,
+        "adverts": [
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {},
+                "can_view_contacts": true,
+                "category_id": 287,
+                "category_name": "Food & Beverages",
+                "category_slug": "meals-and-drinks",
+                "count_images": 7,
+                "details": "* Indomie Mi goreng instant noodles: \nReally great quality noodles as a base to customize to...",
+                "fb_view_content_data": {
+                    "content_name": "Indomie Mi Goreng (Stir Fried Instant Noodles 5-Pack",
+                    "content_category": "Food and Beverages",
+                    "content_ids": [
+                        "rivcaGGBINuvWHDbyNuzvUgv"
+                    ],
+                    "content_type": "product",
+                    "value": "0.12",
+                    "currency": "USD"
+                },
+                "guid": "rivcaGGBINuvWHDbyNuzvUgv",
+                "id": 8898113,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/33114562_MzAwLTMwMC1hNjhkM2YyMzIy.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/33114562_MzAwLTMwMC1hNjhkM2YyMzIy.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            300
+                        ]
+                    }
+                ],
+                "images_count": 7,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_8898113",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 55,
+                    "view": "GH₵ 55",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 55",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "* Indomie Mi goreng instant noodles: \nReally great quality noodles as a base to customize to...",
+                "slug": "indomie-mi-goreng-stir-fried-instant-noodles-5-pack",
+                "status": "active",
+                "title": "Indomie Mi Goreng (Stir Fried Instant Noodles 5-Pack",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/meals-and-drinks/indomie-mi-goreng-stir-fried-instant-noodles-5-pack-rivcaGGBINuvWHDbyNuzvUgv.html?page=2&pos=1&cur_pos=1&ads_per_page=20&ads_count=450&lid=PGJnaJfB81H91lHF",
+                "user_id": 2756663
+            },
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {},
+                "can_view_contacts": true,
+                "category_id": 287,
+                "category_name": "Food & Beverages",
+                "category_slug": "meals-and-drinks",
+                "count_images": 5,
+                "details": "Corned Beef: Canned meat (beef), traditionally very popular as a breadspread for breakfast, salads,...",
+                "fb_view_content_data": {
+                    "content_name": "Corned Beef 340g (Cornbeef)",
+                    "content_category": "Food and Beverages",
+                    "content_ids": [
+                        "kAsBVSqDHIXakj2CdqXRUEkU"
+                    ],
+                    "content_type": "product",
+                    "value": "0.12",
+                    "currency": "USD"
+                },
+                "guid": "kAsBVSqDHIXakj2CdqXRUEkU",
+                "id": 5924978,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/21470414_MzAwLTM2Mi02NDk2OGM1YTY4.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/21470414_MzAwLTM2Mi02NDk2OGM1YTY4.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            362
+                        ]
+                    }
+                ],
+                "images_count": 5,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_5924978",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 60,
+                    "view": "GH₵ 60",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 60",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "Corned Beef: Canned meat (beef), traditionally very popular as a breadspread for breakfast, salads,...",
+                "slug": "corned-beef-340g-cornbeef",
+                "status": "active",
+                "title": "Corned Beef 340g (Cornbeef)",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/meals-and-drinks/corned-beef-340g-cornbeef-kAsBVSqDHIXakj2CdqXRUEkU.html?page=2&pos=2&cur_pos=2&ads_per_page=20&ads_count=450&lid=PGJnaJfB81H91lHF",
+                "user_id": 2756663
+            },
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {},
+                "can_view_contacts": true,
+                "category_id": 256,
+                "category_name": "Body Care",
+                "category_slug": "bath-body",
+                "count_images": 3,
+                "details": "All-in-1 daily care for sensitive teeth. Care for sensitive teeth should not come at the expense of...",
+                "fb_view_content_data": {
+                    "content_name": "Sensodyne Toothpaste",
+                    "content_category": "Body Care",
+                    "content_ids": [
+                        "ubHRClo7ZOLmITx01fFLdPuY"
+                    ],
+                    "content_type": "product",
+                    "value": "0.08",
+                    "currency": "USD"
+                },
+                "guid": "ubHRClo7ZOLmITx01fFLdPuY",
+                "id": 7266635,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/26662024_MzAwLTM0OS1kZjZjZGY3ZTIy.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/26662024_MzAwLTM0OS1kZjZjZGY3ZTIy.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            349
+                        ]
+                    }
+                ],
+                "images_count": 3,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_7266635",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 85,
+                    "view": "GH₵ 85",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 85",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "All-in-1 daily care for sensitive teeth. Care for sensitive teeth should not come at the expense of...",
+                "slug": "sensodyne-toothpaste",
+                "status": "active",
+                "title": "Sensodyne Toothpaste",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/bath-body/sensodyne-toothpaste-ubHRClo7ZOLmITx01fFLdPuY.html?page=2&pos=3&cur_pos=3&ads_per_page=20&ads_count=450&lid=PGJnaJfB81H91lHF",
+                "user_id": 2756663
+            },
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {
+                    "label": "TOP+",
+                    "slug": "booster",
+                    "bg_color": "#00B53F",
+                    "text_color": "#ffffff",
+                    "aside_color": "#229826",
+                    "service_type": "boost"
+                },
+                "can_view_contacts": true,
+                "category_id": 287,
+                "category_name": "Food & Beverages",
+                "category_slug": "meals-and-drinks",
+                "count_images": 3,
+                "details": "- Nutella Biscuits: \nEnjoy the Crunchy biscuit with a creamy heart of Nutella \n- 304g . . 22x\n- 22...",
+                "fb_view_content_data": {
+                    "content_name": "Nutella Biscuit in Resealable Bag 304g With Hazelnuts Chocolate Spread",
+                    "content_category": "Food and Beverages",
+                    "content_ids": [
+                        "zcLadGSpV1DejPwGA82Tp8cV"
+                    ],
+                    "content_type": "product",
+                    "value": "0.12",
+                    "currency": "USD"
+                },
+                "guid": "zcLadGSpV1DejPwGA82Tp8cV",
+                "id": 14882359,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/55298670_MzAwLTQwMC0yY2E4ZTZjZDhl.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/55298670_MzAwLTQwMC0yY2E4ZTZjZDhl.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            400
+                        ]
+                    }
+                ],
+                "images_count": 3,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_14882359",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "#FEA03C",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 120,
+                    "view": "GH₵ 120",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 120",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "- Nutella Biscuits: \nEnjoy the Crunchy biscuit with a creamy heart of Nutella \n- 304g . . 22x\n- 22...",
+                "slug": "nutella-biscuit-in-resealable-bag-304g-with-hazelnuts-chocolate-spread",
+                "status": "active",
+                "title": "Nutella Biscuit in Resealable Bag 304g With Hazelnuts Chocolate Spread",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/meals-and-drinks/nutella-biscuit-in-resealable-bag-304g-with-hazelnuts-chocolate-spread-zcLadGSpV1DejPwGA82Tp8cV.html?page=2&pos=4&cur_pos=4&ads_per_page=20&ads_count=450&lid=PGJnaJfB81H91lHF",
+                "user_id": 2756663
+            },
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {},
+                "can_view_contacts": true,
+                "category_id": 392,
+                "category_name": "Household Chemicals",
+                "category_slug": "household-chemicals",
+                "count_images": 4,
+                "details": "Excellent Fabric Perfume. \nFresh fragrance in all your clothings all day long. \nLong-lasting...",
+                "fb_view_content_data": {
+                    "content_name": "Lenor Liquid Fabric Softener Range of Fragrances",
+                    "content_category": "Household Chemicals",
+                    "content_ids": [
+                        "2XJIg6jIShSD2TfiX52JcQW3"
+                    ],
+                    "content_type": "product",
+                    "value": "0.15",
+                    "currency": "USD"
+                },
+                "guid": "2XJIg6jIShSD2TfiX52JcQW3",
+                "id": 8981147,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/33439543_MzAwLTM3NS0zN2I5M2EwZGM0.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/33439543_MzAwLTM3NS0zN2I5M2EwZGM0.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            375
+                        ]
+                    }
+                ],
+                "images_count": 4,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_8981147",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 150,
+                    "view": "GH₵ 150",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 150",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "Excellent Fabric Perfume. \nFresh fragrance in all your clothings all day long. \nLong-lasting...",
+                "slug": "lenor-liquid-fabric-softener-range-of-fragrances",
+                "status": "active",
+                "title": "Lenor Liquid Fabric Softener Range of Fragrances",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/household-chemicals/lenor-liquid-fabric-softener-range-of-fragrances-2XJIg6jIShSD2TfiX52JcQW3.html?page=2&pos=5&cur_pos=5&ads_per_page=20&ads_count=450&lid=PGJnaJfB81H91lHF",
+                "user_id": 2756663
+            },
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {},
+                "can_view_contacts": true,
+                "category_id": 392,
+                "category_name": "Household Chemicals",
+                "category_slug": "household-chemicals",
+                "count_images": 9,
+                "details": "*Lenor Fabric softener: gives a high-quality, long-lasting fragrance, nourishing softness for a soft...",
+                "fb_view_content_data": {
+                    "content_name": "Lenor Fabric Softeners. Pearls, Disc (Silas, Ariel, Persil)",
+                    "content_category": "Household Chemicals",
+                    "content_ids": [
+                        "A0LwMGwWOLQtrvOfZT8oOYYI"
+                    ],
+                    "content_type": "product",
+                    "value": "0.15",
+                    "currency": "USD"
+                },
+                "guid": "A0LwMGwWOLQtrvOfZT8oOYYI",
+                "id": 5373743,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/19360824_MzAwLTI1OC04ZTY5Y2YwNmFj.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/19360824_MzAwLTI1OC04ZTY5Y2YwNmFj.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            258
+                        ]
+                    }
+                ],
+                "images_count": 9,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_5373743",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 35,
+                    "view": "GH₵ 35",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 35",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "*Lenor Fabric softener: gives a high-quality, long-lasting fragrance, nourishing softness for a soft...",
+                "slug": "lenor-fabric-softeners-pearls-disc-silas-ariel-persil",
+                "status": "active",
+                "title": "Lenor Fabric Softeners. Pearls, Disc (Silas, Ariel, Persil)",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/household-chemicals/lenor-fabric-softeners-pearls-disc-silas-ariel-persil-A0LwMGwWOLQtrvOfZT8oOYYI.html?page=2&pos=6&cur_pos=6&ads_per_page=20&ads_count=450&lid=PGJnaJfB81H91lHF",
+                "user_id": 2756663
+            },
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {},
+                "can_view_contacts": true,
+                "category_id": 249,
+                "category_name": "Care & Feeding",
+                "category_slug": "baby-care",
+                "count_images": 5,
+                "details": "Give your wards and yourself with healthy and nutritious foods like; Custard, Griesmeel (Semolina)....",
+                "fb_view_content_data": {
+                    "content_name": "Custard, Griesmeel (Wheat Semolina), Pancake Mix",
+                    "content_category": "Care and Feeding",
+                    "content_ids": [
+                        "i5N2s7bCdduIOW1gogdOwxD"
+                    ],
+                    "content_type": "product",
+                    "value": "0.09",
+                    "currency": "USD"
+                },
+                "guid": "i5N2s7bCdduIOW1gogdOwxD",
+                "id": 5494665,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/22113160_MzAwLTMyOC0yYzMzN2VlYzgw.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/22113160_MzAwLTMyOC0yYzMzN2VlYzgw.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            328
+                        ]
+                    }
+                ],
+                "images_count": 5,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_5494665",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 45,
+                    "view": "GH₵ 45",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 45",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "Give your wards and yourself with healthy and nutritious foods like; Custard, Griesmeel (Semolina)....",
+                "slug": "custard-griesmeel-wheat-semolina-pancake-mix",
+                "status": "active",
+                "title": "Custard, Griesmeel (Wheat Semolina), Pancake Mix",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/baby-care/custard-griesmeel-wheat-semolina-pancake-mix-i5N2s7bCdduIOW1gogdOwxD.html?page=2&pos=12&cur_pos=12&ads_per_page=20&ads_count=450&lid=PGJnaJfB81H91lHF",
+                "user_id": 2756663
+            },
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {},
+                "can_view_contacts": true,
+                "category_id": 392,
+                "category_name": "Household Chemicals",
+                "category_slug": "household-chemicals",
+                "count_images": 4,
+                "details": "Lenor Unstoppables Spring Awakening: Boosts the scent of your laundry with a fresh, springtime...",
+                "fb_view_content_data": {
+                    "content_name": "Lenor Pearls in Wash Scent Booster",
+                    "content_category": "Household Chemicals",
+                    "content_ids": [
+                        "393PlMMddyJofwHp05xMl5vk"
+                    ],
+                    "content_type": "product",
+                    "value": "0.15",
+                    "currency": "USD"
+                },
+                "guid": "393PlMMddyJofwHp05xMl5vk",
+                "id": 8390865,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/31126081_MzAwLTM5NC0zMzEwMGE0Y2E0.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/31126081_MzAwLTM5NC0zMzEwMGE0Y2E0.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            394
+                        ]
+                    }
+                ],
+                "images_count": 4,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_8390865",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 320,
+                    "view": "GH₵ 320",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 320",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "Lenor Unstoppables Spring Awakening: Boosts the scent of your laundry with a fresh, springtime...",
+                "slug": "lenor-pearls-in-wash-scent-booster",
+                "status": "active",
+                "title": "Lenor Pearls in Wash Scent Booster",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/household-chemicals/lenor-pearls-in-wash-scent-booster-393PlMMddyJofwHp05xMl5vk.html?page=2&pos=13&cur_pos=13&ads_per_page=20&ads_count=450&lid=PGJnaJfB81H91lHF",
+                "user_id": 2756663
+            },
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {},
+                "can_view_contacts": true,
+                "category_id": 287,
+                "category_name": "Food & Beverages",
+                "category_slug": "meals-and-drinks",
+                "count_images": 4,
+                "details": "* Black Rice: a dark whole-grain wild rice that tastes mild and nutty. With a deep purple, nearly...",
+                "fb_view_content_data": {
+                    "content_name": "Black Rice",
+                    "content_category": "Food and Beverages",
+                    "content_ids": [
+                        "eRUKWcOoSIjWkpNt2a7Ta766"
+                    ],
+                    "content_type": "product",
+                    "value": "0.12",
+                    "currency": "USD"
+                },
+                "guid": "eRUKWcOoSIjWkpNt2a7Ta766",
+                "id": 9529083,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/35556944_MzAwLTQwMC1hZDcwMjhkZmQ1.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/35556944_MzAwLTQwMC1hZDcwMjhkZmQ1.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            400
+                        ]
+                    }
+                ],
+                "images_count": 4,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_9529083",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 70,
+                    "view": "GH₵ 70",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 70",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "* Black Rice: a dark whole-grain wild rice that tastes mild and nutty. With a deep purple, nearly...",
+                "slug": "black-rice",
+                "status": "active",
+                "title": "Black Rice",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/meals-and-drinks/black-rice-eRUKWcOoSIjWkpNt2a7Ta766.html?page=2&pos=14&cur_pos=14&ads_per_page=20&ads_count=450&lid=PGJnaJfB81H91lHF",
+                "user_id": 2756663
+            },
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {},
+                "can_view_contacts": true,
+                "category_id": 249,
+                "category_name": "Care & Feeding",
+                "category_slug": "baby-care",
+                "count_images": 5,
+                "details": "Give your wards and yourself with healthy and nutritious foods like; Custard, Griesmeel (Semolina)....",
+                "fb_view_content_data": {
+                    "content_name": "Custard, Griesmeel (Wheat Semolina), Pancake Mix",
+                    "content_category": "Care and Feeding",
+                    "content_ids": [
+                        "i5N2s7bCdduIOW1gogdOwxD"
+                    ],
+                    "content_type": "product",
+                    "value": "0.09",
+                    "currency": "USD"
+                },
+                "guid": "i5N2s7bCdduIOW1gogdOwxD",
+                "id": 5494665,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/22113160_MzAwLTMyOC0yYzMzN2VlYzgw.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/22113160_MzAwLTMyOC0yYzMzN2VlYzgw.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            328
+                        ]
+                    }
+                ],
+                "images_count": 5,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_5494665",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 45,
+                    "view": "GH₵ 45",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 45",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "Give your wards and yourself with healthy and nutritious foods like; Custard, Griesmeel (Semolina)....",
+                "slug": "custard-griesmeel-wheat-semolina-pancake-mix",
+                "status": "active",
+                "title": "Custard, Griesmeel (Wheat Semolina), Pancake Mix",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/baby-care/custard-griesmeel-wheat-semolina-pancake-mix-i5N2s7bCdduIOW1gogdOwxD.html?page=2&pos=12&cur_pos=12&ads_per_page=20&ads_count=450&lid=6PcvaIJwfx230qGI",
+                "user_id": 2756663
+            },
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {},
+                "can_view_contacts": true,
+                "category_id": 392,
+                "category_name": "Household Chemicals",
+                "category_slug": "household-chemicals",
+                "count_images": 4,
+                "details": "Lenor Unstoppables Spring Awakening: Boosts the scent of your laundry with a fresh, springtime...",
+                "fb_view_content_data": {
+                    "content_name": "Lenor Pearls in Wash Scent Booster",
+                    "content_category": "Household Chemicals",
+                    "content_ids": [
+                        "393PlMMddyJofwHp05xMl5vk"
+                    ],
+                    "content_type": "product",
+                    "value": "0.15",
+                    "currency": "USD"
+                },
+                "guid": "393PlMMddyJofwHp05xMl5vk",
+                "id": 8390865,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/31126081_MzAwLTM5NC0zMzEwMGE0Y2E0.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/31126081_MzAwLTM5NC0zMzEwMGE0Y2E0.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            394
+                        ]
+                    }
+                ],
+                "images_count": 4,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_8390865",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 320,
+                    "view": "GH₵ 320",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 320",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "Lenor Unstoppables Spring Awakening: Boosts the scent of your laundry with a fresh, springtime...",
+                "slug": "lenor-pearls-in-wash-scent-booster",
+                "status": "active",
+                "title": "Lenor Pearls in Wash Scent Booster",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/household-chemicals/lenor-pearls-in-wash-scent-booster-393PlMMddyJofwHp05xMl5vk.html?page=2&pos=13&cur_pos=13&ads_per_page=20&ads_count=450&lid=6PcvaIJwfx230qGI",
+                "user_id": 2756663
+            },
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {},
+                "can_view_contacts": true,
+                "category_id": 287,
+                "category_name": "Food & Beverages",
+                "category_slug": "meals-and-drinks",
+                "count_images": 4,
+                "details": "* Black Rice: a dark whole-grain wild rice that tastes mild and nutty. With a deep purple, nearly...",
+                "fb_view_content_data": {
+                    "content_name": "Black Rice",
+                    "content_category": "Food and Beverages",
+                    "content_ids": [
+                        "eRUKWcOoSIjWkpNt2a7Ta766"
+                    ],
+                    "content_type": "product",
+                    "value": "0.12",
+                    "currency": "USD"
+                },
+                "guid": "eRUKWcOoSIjWkpNt2a7Ta766",
+                "id": 9529083,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/35556944_MzAwLTQwMC1hZDcwMjhkZmQ1.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/35556944_MzAwLTQwMC1hZDcwMjhkZmQ1.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            400
+                        ]
+                    }
+                ],
+                "images_count": 4,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_9529083",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 70,
+                    "view": "GH₵ 70",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 70",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "* Black Rice: a dark whole-grain wild rice that tastes mild and nutty. With a deep purple, nearly...",
+                "slug": "black-rice",
+                "status": "active",
+                "title": "Black Rice",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/meals-and-drinks/black-rice-eRUKWcOoSIjWkpNt2a7Ta766.html?page=2&pos=14&cur_pos=14&ads_per_page=20&ads_count=450&lid=6PcvaIJwfx230qGI",
+                "user_id": 2756663
+            },
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {},
+                "can_view_contacts": true,
+                "category_id": 287,
+                "category_name": "Food & Beverages",
+                "category_slug": "meals-and-drinks",
+                "count_images": 2,
+                "details": "* Rye flour is very nutritious and contains similar amounts of protein as other grains. Compared to...",
+                "fb_view_content_data": {
+                    "content_name": "Organic Wholegrain Rye Flour",
+                    "content_category": "Food and Beverages",
+                    "content_ids": [
+                        "1bF2Mm2hra0yfbxklPCc2Zqg"
+                    ],
+                    "content_type": "product",
+                    "value": "0.12",
+                    "currency": "USD"
+                },
+                "guid": "1bF2Mm2hra0yfbxklPCc2Zqg",
+                "id": 11777183,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/43782224_MzAwLTM3MC1jMWI4MmU4ZjIy.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/43782224_MzAwLTM3MC1jMWI4MmU4ZjIy.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            370
+                        ]
+                    }
+                ],
+                "images_count": 2,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_11777183",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 90,
+                    "view": "GH₵ 90",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 90",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "* Rye flour is very nutritious and contains similar amounts of protein as other grains. Compared to...",
+                "slug": "organic-wholegrain-rye-flour",
+                "status": "active",
+                "title": "Organic Wholegrain Rye Flour",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/meals-and-drinks/organic-wholegrain-rye-flour-1bF2Mm2hra0yfbxklPCc2Zqg.html?page=2&pos=15&cur_pos=15&ads_per_page=20&ads_count=450&lid=6PcvaIJwfx230qGI",
+                "user_id": 2756663
+            },
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {},
+                "can_view_contacts": true,
+                "category_id": 402,
+                "category_name": "Oral Care",
+                "category_slug": "oral-care",
+                "count_images": 15,
+                "details": "* Parodontax: to remove dental plaque bacteria, prevents plaque build-up than regular toothpaste.\n*...",
+                "fb_view_content_data": {
+                    "content_name": "Parodontax Toothpaste (Plaque, Sensitive, Bleeding Gum) 75ml",
+                    "content_category": "Oral Care",
+                    "content_ids": [
+                        "eTBCgrRTYaKNJGvdIF6AUf0l"
+                    ],
+                    "content_type": "product",
+                    "value": "0.08",
+                    "currency": "USD"
+                },
+                "guid": "eTBCgrRTYaKNJGvdIF6AUf0l",
+                "id": 7260086,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/26677858_MzAwLTI1OC04ZTY5Y2YwNmFj.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/26677858_MzAwLTI1OC04ZTY5Y2YwNmFj.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            258
+                        ]
+                    }
+                ],
+                "images_count": 15,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_7260086",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 100,
+                    "view": "GH₵ 100",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 100",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "* Parodontax: to remove dental plaque bacteria, prevents plaque build-up than regular toothpaste.\n*...",
+                "slug": "parodontax-toothpaste-plaque-sensitive-bleeding-gum-75ml",
+                "status": "active",
+                "title": "Parodontax Toothpaste (Plaque, Sensitive, Bleeding Gum) 75ml",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/oral-care/parodontax-toothpaste-plaque-sensitive-bleeding-gum-75ml-eTBCgrRTYaKNJGvdIF6AUf0l.html?page=2&pos=16&cur_pos=16&ads_per_page=20&ads_count=450&lid=6PcvaIJwfx230qGI",
+                "user_id": 2756663
+            },
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {},
+                "can_view_contacts": true,
+                "category_id": 392,
+                "category_name": "Household Chemicals",
+                "category_slug": "household-chemicals",
+                "count_images": 4,
+                "details": "Ariel All-in-1 Pods have everything you need for clean, bright and fresh-smelling clothes in a tiny,...",
+                "fb_view_content_data": {
+                    "content_name": "Ariel All in 1 Pods",
+                    "content_category": "Household Chemicals",
+                    "content_ids": [
+                        "5de1oJbgrkaSPoSAErphTX4d"
+                    ],
+                    "content_type": "product",
+                    "value": "0.15",
+                    "currency": "USD"
+                },
+                "guid": "5de1oJbgrkaSPoSAErphTX4d",
+                "id": 7305563,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/26823880_MzAwLTI5MS0zYmVmZGQyZGM2.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/26823880_MzAwLTI5MS0zYmVmZGQyZGM2.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            291
+                        ]
+                    }
+                ],
+                "images_count": 4,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_7305563",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 120,
+                    "view": "GH₵ 120",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 120",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "Ariel All-in-1 Pods have everything you need for clean, bright and fresh-smelling clothes in a tiny,...",
+                "slug": "ariel-all-in-1-pods",
+                "status": "active",
+                "title": "Ariel All in 1 Pods",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/household-chemicals/ariel-all-in-1-pods-5de1oJbgrkaSPoSAErphTX4d.html?page=2&pos=17&cur_pos=17&ads_per_page=20&ads_count=450&lid=6PcvaIJwfx230qGI",
+                "user_id": 2756663
+            },
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {},
+                "can_view_contacts": true,
+                "category_id": 287,
+                "category_name": "Food & Beverages",
+                "category_slug": "meals-and-drinks",
+                "count_images": 3,
+                "details": "* Vietnamese Rice Vermicelli, perfect for stir-fry or serve with hot broth.\nIngredients: Rice Flour...",
+                "fb_view_content_data": {
+                    "content_name": "Fresh Rice Vermicelli. Rice Noodles",
+                    "content_category": "Food and Beverages",
+                    "content_ids": [
+                        "bcUHeGZwMPHqDljZfW5cT9B7"
+                    ],
+                    "content_type": "product",
+                    "value": "0.12",
+                    "currency": "USD"
+                },
+                "guid": "bcUHeGZwMPHqDljZfW5cT9B7",
+                "id": 10999584,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/41064389_MzAwLTQwMC1iODUyM2IxNTg4.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/41064389_MzAwLTQwMC1iODUyM2IxNTg4.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            400
+                        ]
+                    }
+                ],
+                "images_count": 3,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_10999584",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 75,
+                    "view": "GH₵ 75",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 75",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "* Vietnamese Rice Vermicelli, perfect for stir-fry or serve with hot broth.\nIngredients: Rice Flour...",
+                "slug": "fresh-rice-vermicelli-rice-noodles",
+                "status": "active",
+                "title": "Fresh Rice Vermicelli. Rice Noodles",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/meals-and-drinks/fresh-rice-vermicelli-rice-noodles-bcUHeGZwMPHqDljZfW5cT9B7.html?page=2&pos=18&cur_pos=18&ads_per_page=20&ads_count=450&lid=6PcvaIJwfx230qGI",
+                "user_id": 2756663
+            },
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {},
+                "can_view_contacts": true,
+                "category_id": 287,
+                "category_name": "Food & Beverages",
+                "category_slug": "meals-and-drinks",
+                "count_images": 2,
+                "details": "* Choco Duo is a Duo Chocolate Flavor Spread made with Skimmed milk, cocoa and hazelnut.",
+                "fb_view_content_data": {
+                    "content_name": "Choco Duo Hazelnut Spread ( XXL Cocoa Duo )",
+                    "content_category": "Food and Beverages",
+                    "content_ids": [
+                        "gdQVdVUaDqk4xdhB5yQBf6p1"
+                    ],
+                    "content_type": "product",
+                    "value": "0.12",
+                    "currency": "USD"
+                },
+                "guid": "gdQVdVUaDqk4xdhB5yQBf6p1",
+                "id": 7976916,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/32548731_MzAwLTQwMC0zM2E3NGY4YWFj.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/32548731_MzAwLTQwMC0zM2E3NGY4YWFj.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            400
+                        ]
+                    }
+                ],
+                "images_count": 2,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_7976916",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 120,
+                    "view": "GH₵ 120",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 120",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "* Choco Duo is a Duo Chocolate Flavor Spread made with Skimmed milk, cocoa and hazelnut.",
+                "slug": "choco-duo-hazelnut-spread-xxl-cocoa-duo",
+                "status": "active",
+                "title": "Choco Duo Hazelnut Spread ( XXL Cocoa Duo )",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/meals-and-drinks/choco-duo-hazelnut-spread-xxl-cocoa-duo-gdQVdVUaDqk4xdhB5yQBf6p1.html?page=2&pos=19&cur_pos=19&ads_per_page=20&ads_count=450&lid=6PcvaIJwfx230qGI",
+                "user_id": 2756663
+            },
+            {
+                "admin_info": {},
+                "as_top": false,
+                "attrs": [],
+                "badge_info": {},
+                "can_view_contacts": true,
+                "category_id": 287,
+                "category_name": "Food & Beverages",
+                "category_slug": "meals-and-drinks",
+                "count_images": 3,
+                "details": "* Unroasted , unsalted Cashew Nuts\nAvailable are:\n• Walnuts\n• Almond Nuts\n• Pecan Nuts\n• Pistachio...",
+                "fb_view_content_data": {
+                    "content_name": "Cashew Nuts, Almond Nuts, Walnuts, Pistachio, Pecan Nuts Etc",
+                    "content_category": "Food and Beverages",
+                    "content_ids": [
+                        "aqMixWVSceeZOkG2QSnK2KEf"
+                    ],
+                    "content_type": "product",
+                    "value": "0.12",
+                    "currency": "USD"
+                },
+                "guid": "aqMixWVSceeZOkG2QSnK2KEf",
+                "id": 9885396,
+                "image_obj": {
+                    "url": "https://pictures-ghana.jijistatic.net/36939407_MzAwLTQwMC1jZjJhNjQ1ODEy.webp",
+                    "center": null
+                },
+                "images": [
+                    {
+                        "url": "https://pictures-ghana.jijistatic.net/36939407_MzAwLTQwMC1jZjJhNjQ1ODEy.webp",
+                        "center": null,
+                        "size": [
+                            300,
+                            400
+                        ]
+                    }
+                ],
+                "images_count": 3,
+                "is_boost": "premium",
+                "is_cv": false,
+                "is_inspected": false,
+                "is_job": false,
+                "is_owner": false,
+                "is_top": false,
+                "labels": [
+                    {
+                        "type": "age",
+                        "value": "3+ years on Jiji"
+                    }
+                ],
+                "message_url": "/profile-messages/2756663_9885396",
+                "paid_info": {
+                    "text": "Promoted",
+                    "package_type": "premium",
+                    "border": "",
+                    "icon": true,
+                    "more_photos": false
+                },
+                "price_obj": {
+                    "value": 150,
+                    "view": "GH₵ 150",
+                    "period": null,
+                    "bulk": null,
+                    "type": null
+                },
+                "price_title": "GH₵ 150",
+                "region": "Greater Accra, Circle",
+                "region_id": 1818,
+                "region_item_text": "Greater Accra, Circle",
+                "region_name": "Circle",
+                "region_parent_name": "Greater Accra",
+                "region_slug": "circle",
+                "short_description": "* Unroasted , unsalted Cashew Nuts\nAvailable are:\n• Walnuts\n• Almond Nuts\n• Pecan Nuts\n• Pistachio...",
+                "slug": "cashew-nuts-almond-nuts-walnuts-pistachio-pecan-nuts-etc",
+                "status": "active",
+                "title": "Cashew Nuts, Almond Nuts, Walnuts, Pistachio, Pecan Nuts Etc",
+                "title_labels": [],
+                "tops_count": 0,
+                "url": "/circle/meals-and-drinks/cashew-nuts-almond-nuts-walnuts-pistachio-pecan-nuts-etc-aqMixWVSceeZOkG2QSnK2KEf.html?page=2&pos=20&cur_pos=20&ads_per_page=20&ads_count=450&lid=6PcvaIJwfx230qGI",
+                "user_id": 2756663
+            }
+        ]
+    }
+}

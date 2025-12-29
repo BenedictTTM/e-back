@@ -1,6 +1,5 @@
 import { IsInt, IsOptional, IsString, Min, Max, IsIn, MinLength } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ProductCategory, isValidCategory } from '../categories/category.enum';
 
 /**
  * DTO for category-based product retrieval
@@ -11,7 +10,7 @@ import { ProductCategory, isValidCategory } from '../categories/category.enum';
 export class GetProductsByCategoryDto {
   @IsString({ message: 'Category must be a string' })
   @MinLength(1, { message: 'Category cannot be empty' })
-  category: ProductCategory; // dynamic string category
+  category: string; // dynamic string category
 
   @IsOptional()
   @Type(() => Number)
@@ -82,7 +81,7 @@ export class CategoryProductsResponseDto {
  * Used for analytics and dashboard features
  */
 export class CategoryStatsDto {
-  category: ProductCategory;
+  category: string;
   totalProducts: number;
   activeProducts: number;
   averagePrice: number;

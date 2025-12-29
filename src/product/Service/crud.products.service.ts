@@ -9,6 +9,8 @@ import {
 import { PrismaService } from '../../prisma/prisma.service';
 import { ProductDto } from '../dto/product.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class CrudService {
@@ -206,6 +208,83 @@ export class CrudService {
       const duration = Date.now() - startTime;
       this.logger.error(`❌ Delete failed | ID:${productId} | ${duration}ms | ${error.message}`);
       throw new InternalServerErrorException(`Failed to delete product: ${error.message}`);
+    }
+  }
+
+  /**
+   * Import products from JSON file
+   */
+  async importProductsFromJSON(userId: number) {
+    const startTime = Date.now();
+    const filePath = path.join(process.cwd(), 'src/product/data/products.json');
+
+    try {
+      if (!fs.existsSync(filePath)) {
+        throw new NotFoundException('Products JSON file not found');
+      }
+
+      const fileContent = fs.readFileSync(filePath, 'utf-8');
+      const jsonData = JSON.parse(fileContent);
+      const adverts = jsonData.adverts_list?.adverts || [];
+
+      this.logger.log(`Found ${adverts.length} products to import`);
+
+      let importedCount = 0;
+      let skippedCount = 0;
+
+      for (const advert of adverts) {
+        // Check if product exists by title
+        const existingProduct = await this.prisma.product.findFirst({
+          where: { title: advert.title },
+        });
+
+        if (existingProduct) {
+          this.logger.log(`Skipping duplicate product: ${advert.title}`);
+          skippedCount++;
+          continue;
+        }
+
+        // Map JSON data to ProductDto structure
+        // Note: category logic might need adjustment if categories don't exist
+        // For now, we use the string category name as per createProduct logic
+
+        // Extract image URLs
+        const imageUrls = advert.images?.map((img: any) => img.url) || [];
+
+        await this.prisma.product.create({
+          data: {
+            title: advert.title,
+            description: advert.details || advert.short_description || '',
+            originalPrice: parseFloat(advert.price_obj?.value || 0),
+            discountedPrice: parseFloat(advert.price_obj?.value || 0), // Assuming no discount initially
+            category: advert.category_name || 'Uncategorized',
+            imageUrl: imageUrls,
+            isActive: true,
+            isSold: false,
+            condition: 'New', // Defaulting to New
+            tags: [], // Could extract from title or description if needed
+            stock: 10, // Default stock
+            views: 0,
+            userId: userId,
+          },
+        });
+        importedCount++;
+      }
+
+      const duration = Date.now() - startTime;
+      this.logger.log(`✅ Import completed | Imported: ${importedCount} | Skipped: ${skippedCount} | ${duration}ms`);
+
+      return {
+        success: true,
+        message: `Import completed. Imported: ${importedCount}, Skipped: ${skippedCount}`,
+        importedCount,
+        skippedCount,
+      };
+
+    } catch (error) {
+      const duration = Date.now() - startTime;
+      this.logger.error(`❌ Import failed | ${duration}ms | ${error.message}`);
+      throw new InternalServerErrorException(`Failed to import products: ${error.message}`);
     }
   }
 }

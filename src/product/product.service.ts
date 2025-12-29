@@ -44,4 +44,7 @@ export class ProductService {
         return this.getProductsService.searchProducts(query);
     }
 
+    async importProductsFromJSON(userId: number) {
+        return this.crudService.importProductsFromJSON(userId);
+    }
 }

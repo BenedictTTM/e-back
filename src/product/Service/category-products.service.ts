@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { ProductCategory, CATEGORY_METADATA, getCategoryMetadata, normalizeCategoryInput, generateMetadataForCategory } from '../categories/category.enum';
+
 import { GetProductsByCategoryDto, CategoryProductsResponseDto, CategoryStatsDto } from '../dto/category.dto';
 import { Prisma } from '@prisma/client';
 
@@ -37,11 +37,27 @@ export class CategoryProductsService {
 
     try {
       // OPTIMIZATION 1: Use raw category input (no normalization requested)
-      const categoryKey = dto.category as any;
+      const categoryKey = dto.category;
 
-      // OPTIMIZATION 2: Get category metadata early (from in-memory cache)
-      // Retrieve metadata or generate fallback for dynamic categories
-      const categoryMetadata = getCategoryMetadata(categoryKey) || generateMetadataForCategory(dto.category);
+      // OPTIMIZATION 2: Get category metadata early (from DB)
+      // For now, we will just use the string, but ideally we fetch from Category table
+      let categoryMetadata = {
+        key: categoryKey,
+        label: categoryKey,
+        description: `Browse products in ${categoryKey}`,
+      };
+
+      const categoryRecord = await this.prisma.category.findUnique({
+        where: { name: categoryKey },
+      });
+
+      if (categoryRecord) {
+        categoryMetadata = {
+          key: categoryRecord.name,
+          label: categoryRecord.name,
+          description: categoryRecord.description || `Browse products in ${categoryRecord.name}`,
+        }
+      }
 
       // OPTIMIZATION 3: Calculate pagination early to validate request
       const page = Math.max(1, dto.page || 1);
@@ -191,15 +207,12 @@ export class CategoryProductsService {
    * Get statistics for a specific category
    * Useful for analytics, dashboards, and category overview pages
    * 
-   * @param category - ProductCategory to get stats for
+   * @param category - string category to get stats for
    * @returns Promise<CategoryStatsDto> - Category statistics
    */
-  async getCategoryStats(category: ProductCategory): Promise<CategoryStatsDto> {
+  async getCategoryStats(category: string): Promise<CategoryStatsDto> {
     try {
-      const normalizedCategory = normalizeCategoryInput(category);
-      if (!normalizedCategory) {
-        throw new BadRequestException(`Invalid category: ${category}`);
-      }
+      const normalizedCategory = category; // No normalization needed for string
 
       const [totalProducts, activeProducts, priceStats, popularTags] = await Promise.all([
         // Total products in category
@@ -260,7 +273,7 @@ export class CategoryProductsService {
    * @returns Promise<Array> - All categories with metadata and counts
    */
   async getAllCategoriesWithCounts(): Promise<Array<{
-    category: ProductCategory;
+    category: string;
     label: string;
     description: string;
     productCount: number;
@@ -269,7 +282,15 @@ export class CategoryProductsService {
     const startTime = Date.now();
 
     try {
-      // OPTIMIZATION: Single aggregation query with groupBy
+      // Fetch all categories from the Category table
+      const categories = await this.prisma.category.findMany();
+
+      // OPTIMIZATION: Single aggregation query with groupBy to count products per category
+      // We group by the 'categoryId' relation or 'category' string depending on how your data is structured.
+      // Since the prompt emphasizes 'dynamic database categories', and product has 'category' string,
+      // let's stick to the string 'category' field on product for now as that's what seems to be populated.
+      // But ideally we should rely on 'categoryId'.
+
       const categoryCounts = await this.prisma.product.groupBy({
         by: ['category'],
         where: {
@@ -281,36 +302,33 @@ export class CategoryProductsService {
         },
       });
 
-      // OPTIMIZATION: Create a lookup map for O(1) access
+      // Map counts for O(1) access
       const countMap = new Map<string, number>(
         categoryCounts.map(c => [c.category as string, c._count.id])
       );
 
-      // OPTIMIZATION: Single-pass transformation
-      // Build dynamic union of metadata keys and categories found in DB
-      const dynamicKeys = new Set<string>([
-        ...Object.keys(CATEGORY_METADATA),
-        ...Array.from(countMap.keys()).filter((k): k is string => typeof k === 'string' && k.length > 0),
-      ]);
+      // Join DB categories with counts
+      // Note: We might have products with categories that are NOT in the Category table yet.
+      // If you want to show those too, we'd need to merge.
+      // For now, let's prioritize the Category table as the source of truth for "Categories".
 
-      const categories = Array.from(dynamicKeys.values()).map(catKey => {
-        const metadata = getCategoryMetadata(catKey) || generateMetadataForCategory(catKey);
+      const result = categories.map(cat => {
         return {
-          category: catKey,
-          label: metadata.label,
-          description: metadata.description,
-          icon: metadata.icon,
-          productCount: countMap.get(catKey) || 0,
+          category: cat.name,
+          label: cat.name,
+          description: cat.description || '',
+          icon: 'category', // Default icon, or add icon column to Category table
+          productCount: countMap.get(cat.name) || 0,
         };
       });
 
-      // Sort by product count (most popular first)
-      categories.sort((a, b) => b.productCount - a.productCount);
+      // Sort by product count
+      result.sort((a, b) => b.productCount - a.productCount);
 
       const duration = Date.now() - startTime;
-      this.logger.log(`✅ Categories fetched | ${categories.length} categories | ${duration}ms`);
+      this.logger.log(`✅ Categories fetched | ${result.length} categories | ${duration}ms`);
 
-      return categories;
+      return result;
     } catch (error) {
       this.logger.error('❌ Error fetching all categories', error.stack);
       throw new BadRequestException('Failed to fetch categories.');
@@ -322,10 +340,9 @@ export class CategoryProductsService {
    * 
    * PERFORMANCE: Pre-computed object creation
    * Avoids conditional branching in database query
-   * 
    * @private
    */
-  private buildWhereClause(category: ProductCategory, dto: GetProductsByCategoryDto) {
+  private buildWhereClause(category: string, dto: GetProductsByCategoryDto) {
     const where: any = {
       category,
       isActive: true,
@@ -533,7 +550,7 @@ export class CategoryProductsService {
    * 
    * @private
    */
-  private async getPopularTagsForCategory(category: ProductCategory): Promise<string[]> {
+  private async getPopularTagsForCategory(category: string): Promise<string[]> {
     const products = await this.prisma.product.findMany({
       where: {
         category,
