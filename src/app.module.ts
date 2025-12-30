@@ -11,6 +11,7 @@ import { SearchModule } from './search/search.module';
 import { PaymentModule } from './payment/payment.module';
 import { OrderModule } from './order/order.module';
 import { CategoryModule } from './category/category.module';
+import { FeedbackModule } from './feedback/feedback.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { CategoryModule } from './category/category.module';
     PaymentModule,
     CategoryModule,
     OrderModule,
+    FeedbackModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }

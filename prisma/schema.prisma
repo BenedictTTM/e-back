@@ -32,6 +32,7 @@ model User {
   payments             Payment[]
   products             Product[]
   reviews              Review[]  @relation("ReviewerReviews")
+  feedbacks            Feedback[]
 
   @@index([createdAt])
   @@index([role])
@@ -209,6 +210,18 @@ model OrderItem {
 
   @@index([orderId])
   @@index([productId])
+}
+
+model Feedback {
+  id        Int      @id @default(autoincrement())
+  content   String
+  images    String[]
+  createdAt DateTime @default(now())
+  sentiment String   @default("POSITIVE")
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id])
+  likedBy    Int[]    @default([])
+  dislikedBy Int[]    @default([])
 }
 
 enum Role {
