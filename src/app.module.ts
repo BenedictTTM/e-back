@@ -12,6 +12,7 @@ import { PaymentModule } from './payment/payment.module';
 import { OrderModule } from './order/order.module';
 import { CategoryModule } from './category/category.module';
 import { FeedbackModule } from './feedback/feedback.module';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { FeedbackModule } from './feedback/feedback.module';
     CategoryModule,
     OrderModule,
     FeedbackModule,
+    SettingsModule,
   ],
 })
 export class AppModule { }

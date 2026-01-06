@@ -228,3 +228,11 @@ enum Role {
   USER
   ADMIN
 }
+
+model TopBarSettings {
+  id                 Int     @id @default(autoincrement())
+  topic              String
+  callNumber         String
+  discountPercentage String
+  isActive           Boolean @default(true)
+}
