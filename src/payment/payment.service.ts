@@ -53,7 +53,7 @@ export class PaymentService {
         try {
           const reference = `PAY-${created.id}-${Date.now()}`;
           const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-          const callbackUrl = `${frontendUrl}/orders/payment-confirmation`;
+          const callbackUrl = `${frontendUrl}/payment-success`;
 
           const init = await this.paystackService.initializeTransaction(email, amount, reference, callbackUrl);
 
@@ -146,7 +146,13 @@ export class PaymentService {
           }
         }
 
-        return { ok: true, data: updatedPayment };
+        return {
+          status: 'SUCCESS',
+          amount: updatedPayment.amount,
+          reference: updatedPayment.providerPaymentId,
+          paid_at: paystackData.paid_at,
+          data: updatedPayment
+        };
       });
     } catch (error) {
       this.logger.error(`Error processing success for payment ${paymentId}:`, error);
