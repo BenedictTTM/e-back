@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, HttpCode, HttpStatus, Req, Res, Logger } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, HttpCode, HttpStatus, Req, Res, Logger, BadRequestException } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { Request, Response } from 'express';
 import { CreatePaymentDto } from './dto/create-payment.dto';
@@ -9,15 +9,15 @@ export class PaymentController {
   private readonly logger = new Logger(PaymentController.name);
 
   constructor(
-    private readonly paymentService: PaymentService, 
+    private readonly paymentService: PaymentService,
     private readonly paystackService: PaystackService
-  ) {}
+  ) { }
 
   @Post()
   async create(@Body() body: CreatePaymentDto) {
     const { userId, amount, currency = 'GHS', metadata } = body;
-    const result = await this.paymentService.createPayment(userId, amount, currency, metadata);
-    return result;
+    this.logger.log(`Received payment creation request for User ${userId}`);
+    return this.paymentService.createPayment(userId, amount, currency, metadata);
   }
 
   @Get('user/:id')
@@ -25,7 +25,7 @@ export class PaymentController {
     const userId = Number(id);
     return this.paymentService.getPaymentsByUser(userId);
   }
-  
+
   @Get(':id')
   async getById(@Param('id') id: string) {
     const paymentId = Number(id);
@@ -39,30 +39,17 @@ export class PaymentController {
   @Post('verify')
   async verifyPayment(@Body() body: { reference: string }) {
     const { reference } = body;
-    
+
     if (!reference) {
-      return { success: false, error: 'Payment reference is required' };
+      throw new BadRequestException('Payment reference is required');
     }
 
     try {
-      // Verify with Paystack
-      const verification = await this.paystackService.verifyTransaction(reference);
-      
-      // Update our database via webhook handler
-      await this.paymentService.handleWebhook({
-        providerPaymentId: reference,
-        status: verification.status,
-        data: verification,
-      });
-
-      return {
-        success: true,
-        status: verification.status,
-        amount: verification.amount / 100, // Convert from kobo/pesewas to main currency
-        reference: verification.reference,
-      };
+      this.logger.log(`Manual verification requested for ref: ${reference}`);
+      const result = await this.paymentService.verifyAndSyncPayment(reference);
+      return { success: true, ...result };
     } catch (error) {
-      this.logger.error('Payment verification failed:', error);
+      this.logger.error(`Verification failed for ref ${reference}:`, error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Verification failed',
@@ -70,8 +57,9 @@ export class PaymentController {
     }
   }
 
-
-  // Enhanced webhook endpoint with proper monitoring
+  /**
+   * Paystack Webhook Handler
+   */
   @Post('webhook')
   @HttpCode(HttpStatus.OK)
   async webhook(@Req() req: Request, @Res() res: Response) {
@@ -80,49 +68,28 @@ export class PaymentController {
     const payload = req.body;
 
     try {
-      this.logger.log(`Webhook received: ${JSON.stringify({ 
-        hasSignature: !!signature, 
-        payloadKeys: Object.keys(payload),
-        nodeEnv: process.env.NODE_ENV || 'undefined'
-      })}`);
+      // 1. Verify signature
+      const isValid = this.paystackService.verifySignature(rawBody, signature);
 
-      // Signature validation
-      const isProduction = process.env.NODE_ENV === 'production';
-      const valid = this.paystackService.verifySignature(rawBody, signature);
-      
-      this.logger.log(`Signature validation: valid=${valid}, isProduction=${isProduction}`);
-      
-      if (!valid) {
-        this.logger.warn('Webhook signature validation failed');
-        
-        if (isProduction) {
-          return res.status(400).json({ ok: false, message: 'invalid signature' });
-        } else {
-          this.logger.warn('⚠️  Webhook received without valid signature (development mode - proceeding anyway)');
-          // Continue processing in development mode
-        }
+      if (!isValid && process.env.NODE_ENV === 'production') {
+        this.logger.warn('INVALID WEBHOOK SIGNATURE received in production');
+        return res.status(HttpStatus.BAD_REQUEST).json({ message: 'Invalid signature' });
       }
 
-      // Process webhook
-      const data = payload?.data ?? payload;
-      const providerPaymentId = data?.reference ?? data?.id ?? null;
-      const status = data?.status ?? payload?.status ?? 'unknown';
-
-      this.logger.log(`Processing webhook: reference=${providerPaymentId}, status=${status}`);
-
-      if (!providerPaymentId) {
-        this.logger.warn('Webhook missing payment reference');
-        return res.status(400).json({ ok: false, message: 'missing payment reference' });
+      if (!isValid) {
+        this.logger.warn('Webhook signature mismatch (allowed in non-production)');
       }
 
-      const result = await this.paymentService.handleWebhook({ providerPaymentId, status });
-      
-      this.logger.log(`Webhook processed successfully: paymentRef=${providerPaymentId} status=${status} result=${JSON.stringify(result)}`);
-      return res.status(200).json(result);
+      // 2. Process webhook event
+      this.logger.log(`Processing Paystack webhook event: ${payload.event}`);
+      const result = await this.paymentService.handleWebhook(payload);
 
+      return res.status(HttpStatus.OK).json(result);
     } catch (err) {
       this.logger.error('Webhook processing error:', err);
-      return res.status(500).json({ ok: false, error: String(err) });
+      // Always return 200/OK to Paystack even on error to avoid retries if we've logged it
+      // unless we want Paystack to retry. For critical errors, we might want a retry.
+      return res.status(HttpStatus.OK).send();
     }
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable, InternalServerErrorException, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { PaystackService } from './paystack.service';
+import { PaystackWebhookPayload } from './types/paystack.types';
 
 export type CreatePaymentResult = {
   success: boolean;
@@ -14,7 +15,7 @@ export type CreatePaymentResult = {
 export class PaymentService {
   private readonly logger = new Logger(PaymentService.name);
 
-  constructor(private readonly prisma: PrismaService, private readonly paystackService: PaystackService) {}
+  constructor(private readonly prisma: PrismaService, private readonly paystackService: PaystackService) { }
 
   async createPayment(
     userId: number,
@@ -23,190 +24,167 @@ export class PaymentService {
     meta?: Record<string, any>,
   ): Promise<CreatePaymentResult> {
     try {
-      let metaPreview = '{}';
-      try {
-        metaPreview = meta ? JSON.stringify(meta) : '{}';
-      } catch (_) {
-        metaPreview = '[unserializable]';
-      }
-      this.logger.log(`createPayment start: user=${userId} amount=${amount} currency=${currency} meta=${metaPreview}`);
+      this.logger.log(`createPayment: user=${userId} amount=${amount} currency=${currency}`);
 
-      // Validate inputs
-      if (!userId || typeof userId !== 'number' || userId <= 0) {
-        this.logger.error(`Invalid userId in createPayment: ${userId} (type: ${typeof userId})`);
-        return { success: false, error: `Invalid userId: ${userId}` };
-      }
-
-      if (!amount || typeof amount !== 'number' || amount <= 0) {
-        this.logger.error(`Invalid amount in createPayment: ${amount} (type: ${typeof amount})`);
-        return { success: false, error: `Invalid amount: ${amount}` };
+      // Basic validation
+      if (!userId || amount <= 0) {
+        throw new Error('Invalid userId or amount');
       }
 
       const createData: any = {
         userId,
         amount,
         currency,
-        status: 'pending',
+        status: 'PENDING',
         providerPaymentId: meta?.providerPaymentId ?? null,
         metadata: meta ?? {},
       };
 
       const created = await this.prisma.payment.create({ data: createData });
-      this.logger.log(`Payment record created: id=${created.id} user=${userId} amount=${amount} status=pending`);
 
-      // If metadata requests Paystack initialization, attempt to initialize and return the authorization URL
-      if (meta && meta.provider === 'paystack') {
-        // fetch user email
+      if (meta?.provider === 'paystack') {
         const user = await this.prisma.user.findUnique({ where: { id: userId } });
         const email = user?.email || meta?.email;
+
         if (!email) {
-          this.logger.warn('No email available for Paystack initialization');
-          return { success: false, data: created, error: 'No email for paystack initialization' };
+          return { success: false, data: created, error: 'User email required for Paystack' };
         }
 
         try {
-          const reference = `payment-${created.id}-${Date.now()}`;
-          
-          // Construct callback URL - use frontend URL for redirect after payment
-          const frontendUrl = process.env.FRONTEND_URL || process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000';
-          const callbackUrl = `${frontendUrl}/payment-success`;
-          
-          this.logger.log(`Initializing Paystack transaction: paymentId=${created.id} reference=${reference} email=${email} amount=${amount} callback=${callbackUrl}`);
+          const reference = `PAY-${created.id}-${Date.now()}`;
+          const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+          const callbackUrl = `${frontendUrl}/orders/payment-confirmation`;
+
           const init = await this.paystackService.initializeTransaction(email, amount, reference, callbackUrl);
 
-          // store providerPaymentId on the record (reference)
           await this.prisma.payment.update({
             where: { id: created.id },
-            data: { providerPaymentId: init.reference } as any,
+            data: { providerPaymentId: init.reference },
           });
 
-          this.logger.log(`Paystack initialized: paymentId=${created.id} providerReference=${init.reference}`);
           return { success: true, data: created, authorization: init, providerReference: init.reference };
         } catch (err) {
-          this.logger.error('Paystack initialization failed', err as any);
-          // Payment record created but external initialization failed - return that fact to caller
-          return { success: false, data: created, error: String(err) };
+          const errorMsg = err instanceof Error ? err.message : String(err);
+          this.logger.error(`Paystack init failed for Payment ${created.id}:`, errorMsg);
+          return { success: false, data: created, error: `Paystack: ${errorMsg}` };
         }
       }
 
-      // No external provider requested — return created DB record
       return { success: true, data: created };
     } catch (error) {
-      this.logger.error('Failed to create payment', error as any);
-      throw new InternalServerErrorException('Failed to create payment');
+      this.logger.error('Failed to create payment:', error);
+      throw new InternalServerErrorException('Payment creation failed');
     }
   }
 
-  /**
-   * Return payments for a user ordered by newest first.
-   */
-  async getPaymentsByUser(userId: number) {
-    try {
-      this.logger.log(`getPaymentsByUser: user=${userId}`);
-      const payments = await this.prisma.payment.findMany({ where: { userId }, orderBy: { createdAt: 'desc' } });
-      this.logger.log(`getPaymentsByUser: found=${payments?.length ?? 0} for user=${userId}`);
-      return payments;
-    } catch (error) {
-      this.logger.error(`Failed to fetch payments for user=${userId}`, error as any);
-      throw new InternalServerErrorException('Failed to fetch payments');
+  async handleWebhook(payload: PaystackWebhookPayload) {
+    const { event, data } = payload;
+    const reference = data.reference;
+
+    this.logger.log(`Handling webhook event: ${event} for reference: ${reference}`);
+
+    const payment = await this.prisma.payment.findUnique({
+      where: { providerPaymentId: reference },
+    });
+
+    if (!payment) {
+      this.logger.warn(`Payment not found for reference: ${reference}`);
+      return { ok: false, message: 'Payment not found' };
     }
+
+    if (event === 'charge.success') {
+      return this.processSuccessfulPayment(payment.id, data);
+    }
+
+    // Handle other events if necessary (e.g., charge.failed)
+    if (data.status === 'failed') {
+      await this.prisma.payment.update({
+        where: { id: payment.id },
+        data: { status: 'FAILED', metadata: { ...((payment.metadata as any) || {}), lastEvent: event } },
+      });
+    }
+
+    return { ok: true };
   }
 
-  /**
-   * Return a single payment by id.
-   */
-  async getPaymentById(id: number) {
+  private async processSuccessfulPayment(paymentId: number, paystackData: any) {
     try {
-      this.logger.log(`getPaymentById: id=${id}`);
-      const payment = await this.prisma.payment.findUnique({ where: { id } });
-      if (!payment) {
-        this.logger.warn(`getPaymentById: Payment ${id} not found`);
-        throw new NotFoundException(`Payment ${id} not found`);
-      }
-      return payment;
-    } catch (error) {
-      if (error instanceof NotFoundException) throw error;
-      this.logger.error(`Failed to fetch payment id=${id}`, error as any);
-      throw new InternalServerErrorException('Failed to fetch payment');
-    }
-  }
+      return await this.prisma.$transaction(async (tx) => {
+        const payment = await tx.payment.findUnique({
+          where: { id: paymentId },
+        });
 
-
-  async handleWebhook(payload: any, opts?: { provider?: string; signature?: string }) {
-    try {
-      try {
-        this.logger.log(`handleWebhook start: provider=${opts?.provider ?? 'unknown'} payloadKeys=${Object.keys(payload).join(', ')}`);
-      } catch (_) {
-        this.logger.log('handleWebhook start (could not stringify payload keys)');
-      }
-
-      // Normalize common provider webhook shapes
-      const providerPaymentId =
-        payload.providerPaymentId ??
-        payload.id ??
-        payload.reference ??
-        payload.data?.reference ??
-        null;
-
-      const status = payload.status ?? payload?.payment_status ?? payload.data?.status ?? 'unknown';
-
-      if (!providerPaymentId) {
-        this.logger.warn('Webhook without providerPaymentId received');
-        return { ok: false, reason: 'missing_provider_reference' };
-      }
-
-      const existing = await this.prisma.payment.findUnique({ where: { providerPaymentId } as any });
-      if (!existing) {
-        this.logger.warn(`No DB payment found for providerPaymentId=${providerPaymentId}. Payload keys: ${Object.keys(payload).join(', ')}`);
-        return { ok: false, reason: 'not_found' };
-      }
-
-      const newStatusNormalized = String(status ?? '').toLowerCase();
-      const wasSuccess = String(existing.status ?? '').toLowerCase().includes('success');
-      const nowSuccess = newStatusNormalized.includes('success') || newStatusNormalized === 'successful' || newStatusNormalized === 'completed';
-
-      // Transaction to update payment and order payment status atomically
-      const updated = await this.prisma.$transaction(async (tx) => {
-        const metadata = (existing.metadata as any) ?? {};
-
-        const newMetadata: any = { ...metadata, webhookHandledAt: new Date().toISOString(), lastWebhookStatus: status };
+        if (!payment || payment.status === 'SUCCESS') {
+          return { ok: true, message: 'Already processed' };
+        }
 
         // Update payment record
         const updatedPayment = await tx.payment.update({
-          where: { id: existing.id },
-          data: { status, metadata: newMetadata } as any,
+          where: { id: paymentId },
+          data: {
+            status: 'SUCCESS',
+            metadata: {
+              ...(payment.metadata as any || {}),
+              paid_at: paystackData.paid_at,
+              channel: paystackData.channel,
+            },
+          },
         });
 
-        // Update order payment status if this payment is linked to an order
-        if (existing.orderId && nowSuccess) {
-          await (tx as any).order.update({
-            where: { id: existing.orderId },
-            data: { paymentStatus: 'PAID' },
-          });
-          this.logger.log(`Order ${existing.orderId} payment status updated to PAID`);
-        } else if (existing.orderId && !nowSuccess) {
-          // Update to appropriate status for failed/abandoned payments
-          const orderPaymentStatus = newStatusNormalized === 'failed' ? 'FAILED' : 'UNPAID';
-          await (tx as any).order.update({
-            where: { id: existing.orderId },
-            data: { paymentStatus: orderPaymentStatus },
-          });
-          this.logger.log(`Order ${existing.orderId} payment status updated to ${orderPaymentStatus}`);
+        // Update linked order if exists
+        if (payment.orderId) {
+          const order = await (tx as any).order.findUnique({ where: { id: payment.orderId } });
+          if (order) {
+            await (tx as any).order.update({
+              where: { id: payment.orderId },
+              data: {
+                paymentStatus: 'PAID',
+                status: 'CONFIRMED', // Auto-confirm once paid
+              },
+            });
+            this.logger.log(`Order ${payment.orderId} updated to PAID and CONFIRMED`);
+          }
         }
-        
-        return updatedPayment;
+
+        return { ok: true, data: updatedPayment };
+      });
+    } catch (error) {
+      this.logger.error(`Error processing success for payment ${paymentId}:`, error);
+      throw error;
+    }
+  }
+
+  async verifyAndSyncPayment(reference: string) {
+    try {
+      const paystackData = await this.paystackService.verifyTransaction(reference);
+
+      const payment = await this.prisma.payment.findUnique({
+        where: { providerPaymentId: reference },
       });
 
-      try {
-        this.logger.log(`handleWebhook completed: paymentId=${updated.id} newStatus=${updated.status}`);
-      } catch (_) {
-        this.logger.log('handleWebhook completed (could not stringify updated result)');
+      if (!payment) throw new NotFoundException('Payment record not found');
+
+      if (paystackData.status === 'success') {
+        return this.processSuccessfulPayment(payment.id, paystackData);
       }
 
-      return { ok: true, data: updated };
+      return { ok: true, status: paystackData.status };
     } catch (error) {
-      this.logger.error('Error handling payment webhook', error as any);
-      throw new InternalServerErrorException('Webhook handling failed');
+      this.logger.error(`Error verifying and syncing payment ${reference}:`, error);
+      throw error;
     }
+  }
+
+  async getPaymentsByUser(userId: number) {
+    return this.prisma.payment.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async getPaymentById(id: number) {
+    const payment = await this.prisma.payment.findUnique({ where: { id } });
+    if (!payment) throw new NotFoundException('Payment not found');
+    return payment;
   }
 }
