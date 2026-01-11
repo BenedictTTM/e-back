@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -43,6 +43,51 @@ export class FeedbackService {
           },
         },
       },
+    });
+  }
+
+  async addAdminReply(feedbackId: number, adminReply: string) {
+    const feedback = await this.prisma.feedback.findUnique({
+      where: { id: feedbackId },
+    });
+
+    if (!feedback) {
+      throw new NotFoundException('Feedback not found');
+    }
+
+    return this.prisma.feedback.update({
+      where: { id: feedbackId },
+      data: {
+        adminReply,
+        adminReplyAt: new Date(),
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            profilePic: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+  }
+
+
+  async delete(feedbackId: number, userId: number) {
+    const feedback = await this.prisma.feedback.findUnique({
+      where: { id: feedbackId },
+    });
+
+    if (!feedback) {
+      throw new NotFoundException('Feedback not found');
+    }
+
+
+    return this.prisma.feedback.delete({
+      where: { id: feedbackId },
     });
   }
 

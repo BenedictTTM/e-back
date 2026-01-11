@@ -213,15 +213,17 @@ model OrderItem {
 }
 
 model Feedback {
-  id        Int      @id @default(autoincrement())
-  content   String
-  images    String[]
-  createdAt DateTime @default(now())
-  sentiment String   @default("POSITIVE")
-  userId    Int?
-  user      User?    @relation(fields: [userId], references: [id])
-  likedBy    Int[]    @default([])
-  dislikedBy Int[]    @default([])
+  id           Int       @id @default(autoincrement())
+  content      String
+  images       String[]
+  createdAt    DateTime  @default(now())
+  sentiment    String    @default("POSITIVE")
+  userId       Int?
+  user         User?     @relation(fields: [userId], references: [id])
+  likedBy      Int[]     @default([])
+  dislikedBy   Int[]     @default([])
+  adminReply   String?
+  adminReplyAt DateTime?
 }
 
 enum Role {

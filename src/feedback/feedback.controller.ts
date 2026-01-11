@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, UseGuards, Request, Param, UseInterceptors, UploadedFiles, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Request, Param, UseInterceptors, UploadedFiles, BadRequestException, Delete } from '@nestjs/common';
 import { FeedbackService } from './feedback.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { AuthGuard } from '../guards/auth.guard';
+import { AdminGuard } from '../guards/admin.guard';
 
 @Controller('feedback')
 export class FeedbackController {
@@ -50,5 +51,26 @@ export class FeedbackController {
   ) {
     const userId = req.user?.id || 0; // Use 0 or handle in service for anonymous
     return this.feedbackService.react(userId, +id, body.action);
+  }
+
+  @Post(':id/admin-reply')
+  @UseGuards(AuthGuard, AdminGuard)
+  async addAdminReply(
+    @Param('id') id: string,
+    @Body() body: { adminReply: string },
+  ) {
+    if (!body.adminReply || body.adminReply.trim() === '') {
+      throw new BadRequestException('Admin reply cannot be empty');
+    }
+    return this.feedbackService.addAdminReply(+id, body.adminReply);
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard)
+  async delete(@Request() req, @Param('id') id: string) {
+    if (!req.user) {
+      throw new BadRequestException('User must be logged in');
+    }
+    return this.feedbackService.delete(+id, req.user.id);
   }
 }
