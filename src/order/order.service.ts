@@ -46,7 +46,6 @@ export class OrderService {
       for (const p of products) {
         const reqQty = agg[p.id] || 0;
         if (!p.isActive) throw new NotFoundException(`Product ${p.id} is inactive`);
-        if (p.userId === buyerId) throw new ForbiddenException('You cannot order your own product');
         if (p.isSold || p.stock <= 0) throw new BadRequestException(`Product ${p.id} is sold out`);
         if (reqQty > p.stock) throw new BadRequestException(`Insufficient stock for product ${p.id}`);
         const unit = p.discountedPrice ?? p.originalPrice ?? 0;
@@ -118,10 +117,6 @@ export class OrderService {
 
     if (!product || !product.isActive) {
       throw new NotFoundException('Product not found or inactive');
-    }
-
-    if (product.userId === buyerId) {
-      throw new ForbiddenException('You cannot order your own product');
     }
 
 
