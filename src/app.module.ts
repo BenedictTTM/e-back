@@ -12,6 +12,7 @@ import { PaymentModule } from './payment/payment.module';
 import { OrderModule } from './order/order.module';
 import { CategoryModule } from './category/category.module';
 import { FeedbackModule } from './feedback/feedback.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { FeedbackModule } from './feedback/feedback.module';
     AuthModule,
     UserModule,
     PrismaModule,
+    HealthModule, // Health check + keepalive (prevents cold starts)
     ProductModule,
     CloudinaryModule,
     CartModule,
