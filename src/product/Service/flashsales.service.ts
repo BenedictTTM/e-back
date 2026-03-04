@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -54,7 +54,7 @@ export interface FlashSaleResponse {
  * @since 2.0.0
  */
 @Injectable()
-export class FlashSalesService {
+export class FlashSalesService implements OnModuleInit {
   private readonly logger = new Logger(FlashSalesService.name);
 
   // Double Buffer System
@@ -72,9 +72,15 @@ export class FlashSalesService {
   private readonly ROTATION_INTERVAL_MINUTES = 180; // Rotate every 3 hours
 
   constructor(private prisma: PrismaService) {
-    // Initialize both buffers on startup
     this.logger.log('🔧 PRODUCTION MODE: 3-hour rotation interval');
-    this.initializeService();
+  }
+
+  /**
+   * Called by NestJS AFTER all providers are instantiated and connected.
+   * This ensures PrismaService.$connect() has completed before we query the DB.
+   */
+  async onModuleInit() {
+    await this.initializeService();
   }
 
   /**
