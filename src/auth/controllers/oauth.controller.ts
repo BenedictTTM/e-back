@@ -18,12 +18,7 @@ export class OAuthController {
     this.frontendUrl = this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3000';
   }
 
-  /**
-   * Initiates Google OAuth flow
-   * Redirects user to Google's consent screen
-   * 
-   * @route GET /auth/oauth/google
-   */
+
   @Get('google')
   @UseGuards(GoogleOAuthGuard)
   async googleAuth() {

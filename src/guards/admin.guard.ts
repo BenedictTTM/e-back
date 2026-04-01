@@ -8,35 +8,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
-/**
- * AdminGuard - Production-Grade Authorization Guard
- * 
- * Purpose: Restricts access to admin-only routes in a secure, maintainable manner.
- * 
- * Architecture Decisions:
- * 1. Separation of Concerns: This guard handles AUTHORIZATION only (role checking).
- *    Authentication (token validation) is handled by AuthGuard.
- * 
- * 2. Fail-Safe Security: By default, denies access if role information is missing.
- *    Better to deny legitimate users than allow unauthorized access.
- * 
- * 3. Explicit Error Messages: Provides clear, actionable error messages for debugging
- *    in development while remaining secure in production.
- * 
- * 4. Audit Trail: Comprehensive logging for security monitoring and compliance.
- * 
- * Usage:
- * @UseGuards(AuthGuard, AdminGuard)  // Order matters: Auth first, then Admin
- * @Get('/admin/users')
- * getAllUsers() { ... }
- * 
- * Best Practices Applied:
- * - Single Responsibility: Only checks admin role
- * - Defense in Depth: Multiple validation layers
- * - Principle of Least Privilege: Denies by default
- * - Observability: Structured logging for monitoring
- * - Type Safety: Strict TypeScript typing
- */
+
 @Injectable()
 export class AdminGuard implements CanActivate {
   private readonly logger = new Logger(AdminGuard.name);
@@ -46,14 +18,7 @@ export class AdminGuard implements CanActivate {
 
   constructor(private readonly reflector: Reflector) {}
 
-  /**
-   * Validates that the authenticated user has admin privileges
-   * 
-   * @param context - Execution context containing request metadata
-   * @returns true if user is admin, throws exception otherwise
-   * @throws UnauthorizedException if user is not authenticated
-   * @throws ForbiddenException if user lacks admin privileges
-   */
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const { method, url, user } = request;
@@ -63,8 +28,6 @@ export class AdminGuard implements CanActivate {
       `🔐 Admin access attempt: ${method} ${url} by user: ${user?.email || 'unknown'}`,
     );
 
-    // Defense Layer 1: Ensure user is authenticated
-    // This should never happen if AuthGuard is properly configured, but we check anyway
     if (!user) {
       this.logger.error(
         `🚨 SECURITY: Unauthenticated request reached AdminGuard for ${method} ${url}. ` +

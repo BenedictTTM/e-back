@@ -2,24 +2,7 @@ import { Injectable, ForbiddenException, UnauthorizedException, Logger } from '@
 import { TokenService } from './token.service';
 import { UserValidationService } from './user-validation.service';
 
-/**
- * RefreshTokenService
- * 
- * Enterprise-grade token refresh service implementing OAuth 2.0 best practices.
- * Handles automatic token rotation and comprehensive security validations.
- * 
- * Security Features:
- * - Token rotation (old token invalidated after use)
- * - Database-backed token validation
- * - User status verification
- * - Comprehensive audit logging
- * - Race condition prevention
- * - Automatic cleanup of expired tokens
- * - Strictly Bearer token based
- * 
- * @class RefreshTokenService
- * @since 1.0.0
- */
+
 @Injectable()
 export class RefreshTokenService {
   private readonly logger = new Logger(RefreshTokenService.name);
@@ -29,21 +12,7 @@ export class RefreshTokenService {
     private readonly userValidationService: UserValidationService,
   ) { }
 
-  /**
-   * Refresh authentication tokens
-   * 
-   * Implements secure token refresh flow with rotation:
-   * 1. Verify refresh token JWT signature
-   * 2. Validate token exists in database (prevents reuse)
-   * 3. Verify user exists and is active
-   * 4. Generate new access + refresh tokens
-   * 5. Invalidate old refresh token
-   * 6. Store new refresh token
-   * 
-   * @param refreshToken - The refresh token
-   * @returns New access and refresh tokens
-   * @throws ForbiddenException if token is invalid or user is inactive
-   */
+
   async refreshTokens(refreshToken: string) {
     const startTime = Date.now();
     this.logger.debug('🔄 Starting token refresh process...');

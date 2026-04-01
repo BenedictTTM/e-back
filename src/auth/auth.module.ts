@@ -18,31 +18,7 @@ import { PasswordResetService } from './services/passwordReset.service';
 import { EmailModule } from '../email/email.module';
 import { GoogleStrategy } from './strategies/google.strategy';
 
-/**
- * Authentication Module
- * 
- * Enterprise-grade authentication module supporting:
- * - Traditional email/password authentication
- * - Google OAuth 2.0
- * - JWT token management with refresh tokens
- * - Password reset flows
- * - Session management
- * 
- * Architecture:
- * - Strategy Pattern: Multiple auth strategies (local, OAuth)
- * - Service Layer: Business logic separation
- * - Guard Pattern: Route protection
- * - DTO Validation: Input sanitization
- * 
- * Security Features:
- * - Argon2 password hashing
- * - HTTP-only cookies for tokens
- * - Token rotation on refresh
- * - CSRF protection via SameSite cookies
- * - Rate limiting ready
- * 
- * @module AuthModule
- */
+
 @Module({
   imports: [
     PrismaModule,
