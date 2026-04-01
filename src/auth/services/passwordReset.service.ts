@@ -9,11 +9,10 @@ export class PasswordResetService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly emailService: EmailService,
-  ) {}
+  ) { }
 
   async requestPasswordReset(email: string): Promise<{ message: string; resetToken?: string }> {
     try {
-      // Check if user exists
       const user = await this.prisma.user.findUnique({
         where: { email },
         select: { id: true, email: true }
@@ -23,11 +22,9 @@ export class PasswordResetService {
         throw new NotFoundException('No account found with this email address');
       }
 
-      // Generate secure reset token
       const resetToken = crypto.randomBytes(32).toString('hex');
-      const resetExpires = new Date(Date.now() + 3600000); // 1 hour from now
+      const resetExpires = new Date(Date.now() + 3600000); // 1 hour
 
-      // Save reset token to database
       await this.prisma.user.update({
         where: { email },
         data: {
@@ -36,33 +33,25 @@ export class PasswordResetService {
         }
       });
 
-     await this.emailService.sendPasswordResetEmail(user.email, resetToken);
-      
-      // For development - log the reset link
-          await this.emailService.sendPasswordResetEmail(user.email, resetToken);
+      await this.emailService.sendPasswordResetEmail(user.email, resetToken);
 
       return {
         message: 'Password reset link has been sent to your email',
-        resetToken // Remove this in production
+        resetToken
       };
 
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
+      if (error instanceof NotFoundException) throw error;
       throw new BadRequestException('Failed to process password reset request');
     }
   }
 
   async resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
     try {
-      // Find user with valid reset token
       const user = await this.prisma.user.findFirst({
         where: {
           passwordResetToken: token,
-          passwordResetExpires: {
-            gt: new Date() // Token must not be expired
-          }
+          passwordResetExpires: { gt: new Date() }
         },
         select: { id: true, email: true }
       });
@@ -71,10 +60,8 @@ export class PasswordResetService {
         throw new BadRequestException('Invalid or expired reset token');
       }
 
-      // Hash new password;
-    const hashedPassword = await argon2.hash(newPassword);
+      const hashedPassword = await argon2.hash(newPassword);
 
-      // Update password and clear reset token
       await this.prisma.user.update({
         where: { id: user.id },
         data: {
@@ -84,18 +71,11 @@ export class PasswordResetService {
         }
       });
 
-      console.log(`✅ Password reset successful for: ${user.email}`);
-
-      return {
-        message: 'Password has been reset successfully'
-      };
+      return { message: 'Password has been reset successfully' };
 
     } catch (error) {
-      if (error instanceof BadRequestException) {
-        throw error;
-      }
+      if (error instanceof BadRequestException) throw error;
       throw new BadRequestException('Failed to reset password');
     }
   }
-
 }

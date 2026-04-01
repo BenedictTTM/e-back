@@ -14,32 +14,18 @@ export class LoginService {
   ) { }
 
   async login(loginDto: LoginDto) {
-    this.logger.debug(`🔐 Login attempt for email: ${loginDto.email}`);
-
     try {
-      // Validate user credentials - fix method name
       const user = await this.userValidationService.validateUserCredentials(
         loginDto.email,
         loginDto.password,
       );
 
       if (!user) {
-        this.logger.warn(`❌ Invalid credentials for: ${loginDto.email}`);
         throw new UnauthorizedException('Invalid credentials');
       }
 
-      this.logger.debug(`✅ User validated: ${user.email} (ID: ${user.id})`);
-
-      // Generate tokens - fix arguments
-      this.logger.debug('🔄 Generating JWT tokens...');
       const tokens = await this.tokenService.generateTokens(user.id, user.email, user.role);
-
-      this.logger.debug('✅ Tokens generated successfully', {
-        accessTokenLength: tokens.access_token.length,
-        refreshTokenLength: tokens.refresh_token.length,
-      });
-
-      this.logger.log(`User logged in successfully: ${user.id}`);
+      this.logger.log(`User logged in: ${user.id}`);
 
       return {
         success: true,
@@ -55,10 +41,8 @@ export class LoginService {
         refresh_token: tokens.refresh_token,
       };
     } catch (error) {
-      this.logger.error(`🚨 Login failed for ${loginDto.email}:`, error.message);
+      this.logger.error(`Login failed for ${loginDto.email}: ${error.message}`);
       throw error;
     }
   }
-
-
 }

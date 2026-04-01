@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import * as argon from 'argon2';
 
 interface TokenPayload {
-  sub: number; // Changed to number
+  sub: number;
   email: string;
   role: string;
 }
@@ -21,14 +21,10 @@ export class TokenService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly prismaService: PrismaService,
-  ) {}
+  ) { }
 
   async generateTokens(userId: number, email: string, role: string): Promise<AuthTokens> {
-    const payload: TokenPayload = {
-      sub: userId, // Now a number
-      email,
-      role,
-    };
+    const payload: TokenPayload = { sub: userId, email, role };
 
     const [access_token, refresh_token] = await Promise.all([
       this.jwtService.signAsync(payload, {
@@ -50,14 +46,14 @@ export class TokenService {
     expirationDate.setDate(expirationDate.getDate() + 7);
 
     await this.prismaService.user.update({
-      where: { id: userId }, // Now expects number
+      where: { id: userId },
       data: { refreshToken: hashedToken, refreshTokenExp: expirationDate },
     });
   }
 
   async verifyRefreshToken(userId: number, refreshtoken: string): Promise<boolean> {
     const user = await this.prismaService.user.findUnique({
-      where: { id: userId }, // Now expects number
+      where: { id: userId },
       select: { refreshToken: true, refreshTokenExp: true },
     });
 
@@ -72,7 +68,7 @@ export class TokenService {
 
   async revokeRefreshToken(userId: number): Promise<void> {
     await this.prismaService.user.update({
-      where: { id: userId }, // Now expects number
+      where: { id: userId },
       data: { refreshToken: null, refreshTokenExp: null },
     });
   }

@@ -47,29 +47,22 @@ export class SearchService {
 
   constructor(private readonly prisma: PrismaService) { }
 
-  /**
-   * Execute optimized search using PostgreSQL Full-Text Search and GIN indexes
-   */
   async search(
     query: string,
     filters: SearchFilters = {},
     options: SearchOptions = {},
   ): Promise<SearchResult> {
     const page = Math.max(1, options.page || 1);
-    const limit = Math.max(1, Math.min(100, options.limit || 20)); // Cap limit at 100
+    const limit = Math.max(1, Math.min(100, options.limit || 20));
     const offset = (page - 1) * limit;
 
     try {
-      // 1. Build the dynamic WHERE clause
       const whereConditions: Prisma.Sql[] = [
         Prisma.sql`"isActive" = true`,
         Prisma.sql`"isSold" = false`
       ];
 
-      // Text Search Condition
       if (query && query.trim().length > 0) {
-        // Match against the combined vector logic
-        // Removed trigram % operator as it requires pg_trgm extension which might be missing/failing
         whereConditions.push(Prisma.sql`
             to_tsvector('english', 
               COALESCE(title, '') || ' ' || 
@@ -79,12 +72,10 @@ export class SearchService {
         `);
       }
 
-      // Filter: Category
       if (filters.category) {
         whereConditions.push(Prisma.sql`category = ${filters.category}`);
       }
 
-      // Filter: Price Range
       if (filters.minPrice !== undefined) {
         whereConditions.push(Prisma.sql`"discountedPrice" >= ${filters.minPrice}`);
       }
@@ -92,34 +83,28 @@ export class SearchService {
         whereConditions.push(Prisma.sql`"discountedPrice" <= ${filters.maxPrice}`);
       }
 
-      // Filter: Condition
       if (filters.condition) {
         whereConditions.push(Prisma.sql`condition = ${filters.condition}`);
       }
 
-      // Filter: Tags (Array overlap)
       if (filters.tags && filters.tags.length > 0) {
         whereConditions.push(Prisma.sql`tags && ${filters.tags}::text[]`);
       }
 
-      // Filter: In Stock
       if (filters.inStock) {
         whereConditions.push(Prisma.sql`stock > 0`);
       }
 
-      // Combine conditions
       const whereClause = whereConditions.length > 0
         ? Prisma.sql`WHERE ${Prisma.join(whereConditions, ' AND ')}`
         : Prisma.empty;
 
-      // 2. Build Sort Clause
-      let orderByClause = Prisma.sql`ORDER BY "createdAt" DESC`; // Default
+      let orderByClause = Prisma.sql`ORDER BY "createdAt" DESC`;
 
       if (options.sortBy) {
         switch (options.sortBy) {
           case 'relevance':
             if (query && query.trim().length > 0) {
-              // Rank by text match density
               orderByClause = Prisma.sql`ORDER BY ts_rank(
                  to_tsvector('english', COALESCE(title, '') || ' ' || COALESCE(description, '')),
                  websearch_to_tsquery('english', ${query})
@@ -144,7 +129,6 @@ export class SearchService {
         }
       }
 
-      // 3. Execute Query (Fetch Products + Total Count)
       const productsQuery = Prisma.sql`
         SELECT 
           id, title, description, "originalPrice", "discountedPrice", stock, "imageUrl", 
@@ -162,15 +146,12 @@ export class SearchService {
         ${whereClause}
       `;
 
-      // Parallel Execution
       const [products, totalResult] = await Promise.all([
         this.prisma.$queryRaw<Product[]>(productsQuery),
         this.prisma.$queryRaw<{ total: number }[]>(countQuery)
       ]);
 
       const total = totalResult[0]?.total || 0;
-
-      // 4. Fetch Facets (Aggregations) based on current search result context
       const facets = await this.getFacets(whereClause);
 
       return {
@@ -208,7 +189,6 @@ export class SearchService {
       LIMIT 10
     `;
 
-    // Price range
     const priceStats = await this.prisma.$queryRaw<{ min: number, max: number }[]>`
       SELECT MIN("discountedPrice") as min, MAX("discountedPrice") as max
       FROM "Product"

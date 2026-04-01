@@ -15,22 +15,18 @@ export class SignupService {
     private readonly tokenService: TokenService
   ) { }
 
-
   async signup(dto: SignUpDto) {
     try {
-      this.logger.log(`Attempting to create user with email: ${dto.email}`);
+      this.logger.log(`Creating user: ${dto.email}`);
 
-      // Check if the user already exists
       const existingUser = await this.prismaService.user.findUnique({
         where: { email: dto.email },
       });
 
       if (existingUser) {
-        this.logger.warn(`User registration failed: Email ${dto.email} already exists`);
         throw new ConflictException('User with this email already exists');
       }
 
-      // Hash the password using argon2
       const passwordHash = await argon.hash(dto.password);
 
       const user = await this.prismaService.user.create({
@@ -52,15 +48,11 @@ export class SignupService {
         }
       });
 
-      this.logger.log(`User created successfully with ID: ${user.id}`);
+      this.logger.log(`User created: ${user.id}`);
 
-      // Generate tokens using TokenService for consistency
       const tokens = await this.tokenService.generateTokens(user.id, user.email, user.role);
-
-      // Store refresh token
       await this.tokenService.storeRefreshToken(user.id, tokens.refresh_token);
 
-      this.logger.log(`Tokens generated for new user: ${user.id}`);
       return {
         success: true,
         message: 'Account created successfully',
@@ -75,9 +67,8 @@ export class SignupService {
   }
 
   private handleSignupError(error: any, email: string) {
-    this.logger.error(`Error during user signup: ${error.message}`, error.stack);
+    this.logger.error(`Signup error: ${error.message}`, error.stack);
 
-    // Handle specific Prisma errors
     if (error.code === 'P2002') {
       const field = error.meta?.target?.[0] || 'field';
       throw new ConflictException(`${field} already exists`);
@@ -91,25 +82,18 @@ export class SignupService {
       throw new ConflictException('Required data not found');
     }
 
-    // Handle known exceptions
     if (error instanceof ConflictException) {
       throw error;
     }
 
-    // Handle password hashing errors
     if (error.message?.includes('argon2')) {
-      this.logger.error('Password hashing failed', error.stack);
       throw new InternalServerErrorException('Failed to process password');
     }
 
-    // Handle database connection errors
     if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
-      this.logger.error('Database connection failed', error.stack);
       throw new InternalServerErrorException('Database temporarily unavailable');
     }
 
-    // Fallback for unexpected errors
-    this.logger.error('Unexpected error during signup', error.stack);
     throw new InternalServerErrorException('An unexpected error occurred during registration');
   }
 }
