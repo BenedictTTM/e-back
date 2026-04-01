@@ -23,11 +23,7 @@ async function bootstrap() {
   // Enable CORS for frontend connection
   const allowedOrigins = [
     'http://localhost:3000',
-    // Added deployed frontend domain for CORS
-    'https://clicahair.vercel.app',
-    'https://nakpinto1.vercel.app',
-    'https://www.nakpintohair.com',
-    'http://www.nakpintohair.com',
+
     process.env.FRONTEND_URL,
   ].filter(Boolean);
 
@@ -70,6 +66,7 @@ async function bootstrap() {
   console.log('DATABASE_URL configured:', !!process.env.DATABASE_URL);
   await app.listen(port);
   console.log(`🚀 Application is running on port ${port}`);
+  console.log('Rate limiting enabled');
 }
 bootstrap();
 
